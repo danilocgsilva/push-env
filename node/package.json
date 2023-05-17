@@ -1,0 +1,10 @@
+{
+  "name": "node",
+  "version": "0.0.1",
+  "description": "Generates development environment on the fly",
+  "main": "index.js",
+  "keywords": [],
+  "author": "Danilo Silva <contact@danilocgsilva.me>",
+  "license": "MIT",
+  "type": "module"
+}
