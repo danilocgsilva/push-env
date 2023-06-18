@@ -14,9 +14,9 @@ export class FileWritter {
   }
 
   async write() {
-    const folderPath = path.dirname(this.#filePath)
+    const folderPath = path.dirname(this.#filePath);
     if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath)
+      fs.mkdirSync(folderPath, { recursive: true });
     }
 
     await fs.writeFile(this.#filePath, this.#fileContent, (err) => {

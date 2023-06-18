@@ -1,11 +1,16 @@
 import RelationalDb from "./EnvironmentTypes/RelationalDbContent.js"
+import MongoContent from "./EnvironmentTypes/MongoContent.js"
+import NodeContent from "./EnvironmentTypes/NodeContent.js"
+import PhpApacheContent from "./EnvironmentTypes/PhpApacheContent.js"
 
 export default class EnvironmentTypes {
     #types = null
     constructor() {
         this.#types = {
-            node: {},
-            relationaldb: new RelationalDb()
+            node: new NodeContent(),
+            relationaldb: new RelationalDb(),
+            mongo: new MongoContent(),
+            php_apache: new PhpApacheContent()
         }
     }
     getEnvironments() {
