@@ -3,6 +3,8 @@ import { FileWritter } from "./FileWritter.js";
 import MissingQueryException from "./Exceptions/MissingQueryException.js";
 import GeneratorNotImplementedException from "./Exceptions/GeneratorNotImplementedException.js";
 import EnvironmentTypes from "./EnvironmentTypes.js";
+import path from 'path';
+import { homedir } from 'os'
 
 const environmentAskedName = process.argv[2];
 if (!environmentAskedName) {
@@ -14,9 +16,9 @@ try {
   const fileWriter = new FileWritter();
 
   fileWriter.fileContent = dockerComposeYmlGenerator.generate();
-  const filePath = "./docker-compose.yml";
+  const filePath = path.resolve(homedir(), "docker-environments", environmentAskedName, "./docker-compose.yml");
   fileWriter.filePath = filePath;
-  fileWriter.write();
+  await fileWriter.write();
   console.log(
     `Great! A docker-compose.yml file has been generated. Check the file ${filePath}`
   );
