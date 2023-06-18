@@ -21,4 +21,8 @@ services:
 
     return dockerComposeYml;
   }
+
+  getDockerfileContent() {
+    return "";
+  }
 }

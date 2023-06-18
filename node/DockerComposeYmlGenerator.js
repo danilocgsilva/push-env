@@ -13,4 +13,7 @@ export default class DockerComposeYmlGenerator {
     generate() {
         return this.#generator.generate()
     }
+    getDockerfileContent() {
+        return this.#generator.getDockerfileContent()
+    }
 }
