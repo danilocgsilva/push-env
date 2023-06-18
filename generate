@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -z $1 ]; then
+    echo You need to provides a type for environment
+    exit
+fi
+
+node node/index.js $1
