@@ -1,8 +1,20 @@
 import RelationalDb from "./EnvironmentTypes/RelationalDbContent.js"
 
-const environmentTypes = {
-    node: {},
-    relationaldb: new RelationalDb()
+export default class EnvironmentTypes {
+    #types = null
+    constructor() {
+        this.#types = {
+            node: {},
+            relationaldb: new RelationalDb()
+        }
+    }
+    getEnvironments() {
+        return this.#types
+    }
+    listTypes() {
+        Object.keys(this.#types).forEach(key => {
+            console.log('* ' + key)
+        })
+        return ""
+    }
 }
-
-export default environmentTypes

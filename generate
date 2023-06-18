@@ -2,6 +2,7 @@
 
 if [ -z $1 ]; then
     echo You need to provides a type for environment
+    node node/list_environments.js
     exit
 fi
 

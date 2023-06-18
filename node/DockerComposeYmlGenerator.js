@@ -1,9 +1,9 @@
-import environmentTypes from "./environmentTypes.js"
 import GeneratorNotImplementedException from "./Exceptions/GeneratorNotImplementedException.js";
 
 export default class DockerComposeYmlGenerator {
     #generator = null
-    constructor(environmentType) {
+    constructor(environmentType, environmentTypesO) {
+        const environmentTypes = environmentTypesO.getEnvironments()
         const generator = environmentTypes[environmentType];
         if (!generator) {
             throw new GeneratorNotImplementedException()
