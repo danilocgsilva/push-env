@@ -2,6 +2,7 @@ import RelationalDb from "./EnvironmentTypes/RelationalDbContent.js";
 import MongoContent from "./EnvironmentTypes/MongoContent.js";
 import NodeContent from "./EnvironmentTypes/NodeContent.js";
 import PhpApacheContent from "./EnvironmentTypes/PhpApacheContent.js";
+import NodeDebianContent from "./EnvironmentTypes/NodeDebianContent.js";
 
 export default class EnvironmentTypes {
   #types = null;
@@ -11,6 +12,7 @@ export default class EnvironmentTypes {
       relationaldb: new RelationalDb(),
       mongo: new MongoContent(),
       php_apache: new PhpApacheContent(),
+      node_debian: new NodeDebianContent()
     };
   }
   getEnvironments() {

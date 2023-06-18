@@ -37,7 +37,7 @@ export class FileWritter {
   }
 
   async writeDockerFile() {
-    await fs.writeFile(this.#filePath, this.#fileContent, (err) => {
+    await fs.writeFile(this.#dockerfilePath, this.#dockerfileContent, (err) => {
       if (err) {
         console.error(err);
       }
@@ -45,7 +45,7 @@ export class FileWritter {
   }
 
   async writeDockerComposeYmlFile() {
-    await fs.writeFile(this.#dockerfilePath, this.#dockerfileContent, (err) => {
+    await fs.writeFile(this.#filePath, this.#fileContent, (err) => {
       if (err) {
         console.error(err);
       }
