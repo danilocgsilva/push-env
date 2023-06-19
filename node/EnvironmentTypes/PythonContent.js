@@ -1,14 +1,20 @@
-export default class PythonContent {
+import ContentAbstract from "./ContentAbstract.js";
+
+export default class PythonContent extends ContentAbstract {
+  constructor() {
+    super()
+  }
+
   generate() {
-    const environmentContainerName = "python";
+    this.containerName = this.containerName == "" ? "python" : this.containerName
 
     const dockerComposeYml = `version: '3.5'
 
 services:
-  ${environmentContainerName}:
+  ${this.containerName}:
     build:
       context: .
-    container_name: ${environmentContainerName}`
+    container_name: ${this.containerName}`
 
     return dockerComposeYml;
   }

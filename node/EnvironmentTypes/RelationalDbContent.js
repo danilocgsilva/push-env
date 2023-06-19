@@ -1,16 +1,22 @@
-export default class RelationalDbContent {
+import ContentAbstract from "./ContentAbstract.js";
+
+export default class RelationalDbContent extends ContentAbstract {
+  constructor() {
+    super()
+  }
+
   generate() {
     const dbPort1 = 3309;
-    const environmentContainerName = "database1";
+    this.containerName = this.containerName == "" ? "database1" : this.containerName
 
     const dockerComposeYml = `version: '3.5'
 
 services:
-  ${environmentContainerName}:
+  ${this.containerName}:
     image: mariadb:10.7
     ports:
       - ${dbPort1}:3306
-    container_name: ${environmentContainerName}
+    container_name: ${this.containerName}
     volumes:
       - ./data/mysql:/var/lib/mysql
     environment:

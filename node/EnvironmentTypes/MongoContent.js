@@ -1,15 +1,20 @@
-export default class MongoContent {
+import ContentAbstract from "./ContentAbstract.js";
+
+export default class MongoContent extends ContentAbstract {
+  constructor() {
+    super()
+  }
   generate() {
     const dbPort = 27017;
-    const environmentContainerName = "mongodb";
+    this.containerName = this.containerName == "" ? "mongodb" : this.containerName
     const dockerComposeYml = `version: '3.5'
 
 services:
-  ${environmentContainerName}:
+  ${this.containerName}:
     image: mongodb:latest
     ports:
       - ${dbPort}:27017
-    container_name: ${environmentContainerName}
+    container_name: ${this.containerName}
     environment:
       MYSQL_ROOT_PASSWORD: phppass
       MYSQL_USER: phpuser

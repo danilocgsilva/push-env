@@ -1,19 +1,24 @@
-export default class NodeContent {
+import ContentAbstract from "./ContentAbstract.js";
+
+export default class NodeContent extends ContentAbstract {
+  constructor() {
+    super()
+  }
+
   generate() {
     const dbPort = 3000;
-    const environmentContainerName = "node";
-
+    this.containerName = this.containerName == "" ? "node" : this.containerName
     const dockerComposeYml = `version: '3.5'
 
 services:
-  ${environmentContainerName}:
+  ${this.containerName}:
     build:
       context: .
     ports:
       - ${dbPort}:3000
     volumes:
       - ./app:/app
-    container_name: ${environmentContainerName}`;
+    container_name: ${this.containerName}`;
 
     return dockerComposeYml;
   }

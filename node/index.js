@@ -14,7 +14,13 @@ if (!environmentAskedName) {
 try {
   const dockerComposeYmlGenerator = new DockerComposeYmlGenerator(environmentAskedName, new EnvironmentTypes());
   const fileWriter = new FileWritter();
-  const filePath = configureFileWritter(fileWriter, homedir, dockerComposeYmlGenerator, environmentAskedName)
+  const filePath = configureFileWritter(
+    fileWriter, 
+    homedir, 
+    dockerComposeYmlGenerator, 
+    environmentAskedName,
+    process.argv
+  )
   await fileWriter.write();
   console.log(
     `Great! A docker-compose.yml file has been generated. Check the file ${filePath}`

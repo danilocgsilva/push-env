@@ -6,4 +6,4 @@ if [ -z $1 ]; then
     exit
 fi
 
-node node/index.js $1
+node node/index.js $@

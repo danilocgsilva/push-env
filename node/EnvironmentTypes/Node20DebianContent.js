@@ -1,19 +1,24 @@
-export default class Node20DebianContent {
+import ContentAbstract from "./ContentAbstract.js";
+
+export default class Node20DebianContent extends ContentAbstract {
+  constructor() {
+    super()
+  }
 
   generate() {
     const dbPort = 3002;
-    const environmentContainerName = "node-20-debian";
+    this.containerName = this.containerName == "" ? "node-20-debian" : this.containerName
     const dockerComposeYml = `version: '3.5'
     
 services:
-  ${environmentContainerName}:
+  ${this.containerName}:
     build:
       context: .
     ports:
       - ${dbPort}:3000
     volumes:
       - ./app:/app
-    container_name: ${environmentContainerName}`;
+    container_name: ${this.containerName}`;
 
     return dockerComposeYml;
   }
