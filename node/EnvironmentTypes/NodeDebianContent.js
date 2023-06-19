@@ -11,6 +11,8 @@ services:
       context: .
     ports:
       - ${dbPort}:3000
+    volumes:
+      - ./app:/app
     container_name: ${environmentContainerName}`;
 
     return dockerComposeYml;
