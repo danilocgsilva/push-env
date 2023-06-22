@@ -6,15 +6,15 @@ export default class PythonContent extends ContentAbstract {
   }
 
   generate() {
-    this.containerName = this.getContainerName() == "" ? "python" : this.containerName
+    const containerName = this.getContainerName() == "" ? "python" : this.getContainerName()
 
     const dockerComposeYml = `version: '3.5'
 
 services:
-  ${this.containerName}:
+  ${containerName}:
     build:
       context: .
-    container_name: ${this.containerName}`
+    container_name: ${containerName}`
 
     return dockerComposeYml;
   }

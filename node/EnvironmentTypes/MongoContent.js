@@ -6,15 +6,15 @@ export default class MongoContent extends ContentAbstract {
   }
   generate() {
     const dbPort = 27017;
-    this.containerName = this.getContainerName() == "" ? "mongodb" : this.containerName
+    const containerName = this.getContainerName() == "" ? "mongodb" : this.getContainerName()
     const dockerComposeYml = `version: '3.5'
 
 services:
-  ${this.containerName}:
+  ${containerName}:
     image: mongo:latest
     ports:
       - ${dbPort}:27017
-    container_name: ${this.containerName}
+    container_name: ${containerName}
     environment:
       MYSQL_ROOT_PASSWORD: phppass
       MYSQL_USER: phpuser
