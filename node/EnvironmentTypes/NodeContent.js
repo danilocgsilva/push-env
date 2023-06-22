@@ -7,7 +7,7 @@ export default class NodeContent extends ContentAbstract {
 
   generate() {
     const dbPort = 3000;
-    this.containerName = this.containerName == "" ? "node" : this.containerName
+    this.containerName = this.getContainerName() == "" ? "node" : this.containerName
     const dockerComposeYml = `version: '3.5'
 
 services:

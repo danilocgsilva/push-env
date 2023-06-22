@@ -7,7 +7,7 @@ export default class RelationalDbContent extends ContentAbstract {
 
   generate() {
     const dbPort1 = 3309;
-    this.containerName = this.containerName == "" ? "database1" : this.containerName
+    this.containerName = this.getContainerName() == "" ? "database1" : this.containerName
 
     const dockerComposeYml = `version: '3.5'
 

@@ -6,7 +6,7 @@ export default class MongoContent extends ContentAbstract {
   }
   generate() {
     const dbPort = 27017;
-    this.containerName = this.containerName == "" ? "mongodb" : this.containerName
+    this.containerName = this.getContainerName() == "" ? "mongodb" : this.containerName
     const dockerComposeYml = `version: '3.5'
 
 services:

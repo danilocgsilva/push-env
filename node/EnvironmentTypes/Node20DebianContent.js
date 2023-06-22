@@ -7,7 +7,7 @@ export default class Node20DebianContent extends ContentAbstract {
 
   generate() {
     const dbPort = 3002;
-    this.containerName = this.containerName == "" ? "node-20-debian" : this.containerName
+    this.containerName = this.getContainerName() == "" ? "node-20-debian" : this.containerName
     const dockerComposeYml = `version: '3.5'
     
 services:
