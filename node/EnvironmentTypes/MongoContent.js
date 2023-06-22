@@ -11,7 +11,7 @@ export default class MongoContent extends ContentAbstract {
 
 services:
   ${this.containerName}:
-    image: mongodb:latest
+    image: mongo:latest
     ports:
       - ${dbPort}:27017
     container_name: ${this.containerName}
