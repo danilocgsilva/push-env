@@ -5,6 +5,23 @@ import GeneratorNotImplementedException from "./Exceptions/GeneratorNotImplement
 import EnvironmentTypes from "./EnvironmentTypes.js";
 import configureFileWritter from "./configureFileWritter.js";
 import { homedir } from 'os'
+import path from 'path';
+
+const configureFromParameters = (configurations, additionalConfsFromCommandLice) => {
+  additionalConfsFromCommandLice.forEach(confData => {
+    const optionsKeyValue = confData.split(":")
+    if (optionsKeyValue[0] == "hostport") {
+      configurations.dockerComposeYmlGenerator.setHostPort(optionsKeyValue[1])
+    }
+    if (optionsKeyValue[0] == "container_name") {
+      configurations.dockerComposeYmlGenerator.containerName = optionsKeyValue[1]
+      queriedEnvironment += "-" + optionsKeyValue[1]
+    }
+    if (optionsKeyValue[0] == "basePath") {
+      configurations.baseDir = optionsKeyValue[1]
+    }
+  })
+}
 
 const environmentAskedName = process.argv[2];
 if (!environmentAskedName) {
@@ -12,14 +29,26 @@ if (!environmentAskedName) {
 }
 
 try {
-  const dockerComposeYmlGenerator = new DockerComposeYmlGenerator(environmentAskedName, new EnvironmentTypes());
   const fileWriter = new FileWritter();
+
+  const additionalConfsFromCommandLice = process.argv.slice(3)
+  let queriedEnvironment = environmentAskedName
+  const configurations = {
+    baseDir: "",
+    dockerComposeYmlGenerator: new DockerComposeYmlGenerator(environmentAskedName, new EnvironmentTypes())
+  }
+
+  configureFromParameters(configurations, additionalConfsFromCommandLice)
+
+  if (configurations.baseDir == "") {
+    configurations.baseDir = path.resolve(homedir(), "docker-environments", queriedEnvironment)
+  }
+
   const filePath = configureFileWritter(
     fileWriter, 
-    homedir, 
-    dockerComposeYmlGenerator, 
-    environmentAskedName,
-    process.argv
+    configurations.baseDir, 
+    configurations.dockerComposeYmlGenerator, 
+    queriedEnvironment,
   )
   await fileWriter.write();
   console.log(
