@@ -17,7 +17,7 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
       configurations.dockerComposeYmlGenerator.containerName = optionsKeyValue[1]
       queriedEnvironment += "-" + optionsKeyValue[1]
     }
-    if (optionsKeyValue[0] == "basePath") {
+    if (optionsKeyValue[0] == "base_path") {
       configurations.baseDir = optionsKeyValue[1]
     }
   })
