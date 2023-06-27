@@ -15,7 +15,7 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
     }
     if (optionsKeyValue[0] == "container_name") {
       configurations.dockerComposeYmlGenerator.containerName = optionsKeyValue[1]
-      queriedEnvironment += "-" + optionsKeyValue[1]
+      configurations.queriedEnvironment += "-" + optionsKeyValue[1]
     }
     if (optionsKeyValue[0] == "base_path") {
       configurations.baseDir = optionsKeyValue[1]
@@ -32,23 +32,23 @@ try {
   const fileWriter = new FileWritter();
 
   const additionalConfsFromCommandLice = process.argv.slice(3)
-  let queriedEnvironment = environmentAskedName
   const configurations = {
     baseDir: "",
-    dockerComposeYmlGenerator: new DockerComposeYmlGenerator(environmentAskedName, new EnvironmentTypes())
+    dockerComposeYmlGenerator: new DockerComposeYmlGenerator(environmentAskedName, new EnvironmentTypes()),
+    queriedEnvironment: environmentAskedName
   }
 
   configureFromParameters(configurations, additionalConfsFromCommandLice)
 
   if (configurations.baseDir == "") {
-    configurations.baseDir = path.resolve(homedir(), "docker-environments", queriedEnvironment)
+    configurations.baseDir = path.resolve(homedir(), "docker-environments", configurations.queriedEnvironment)
   }
 
   const filePath = configureFileWritter(
     fileWriter, 
     configurations.baseDir, 
     configurations.dockerComposeYmlGenerator, 
-    queriedEnvironment,
+    configurations.queriedEnvironment,
   )
   await fileWriter.write();
   console.log(
