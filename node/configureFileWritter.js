@@ -3,8 +3,7 @@ import path from 'path';
 export default function configureFileWritter(
   fileWriter,
   baseDir,
-  dockerComposeYmlGenerator,
-  queriedEnvironment
+  dockerComposeYmlGenerator
 ) {
   if (baseDir == "") {
     throw new Error("Base directory has not been given!")
@@ -12,7 +11,7 @@ export default function configureFileWritter(
   
   fileWriter.fileContent = dockerComposeYmlGenerator.generate();
 
-  const filePath = path.resolve(baseDir, queriedEnvironment, "./docker-compose.yml");
+  const filePath = path.resolve(baseDir, "./docker-compose.yml");
   fileWriter.filePath = filePath;
   const dockerFileContent = dockerComposeYmlGenerator.getDockerfileContent()
   if (dockerFileContent != "") {
