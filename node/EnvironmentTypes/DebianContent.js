@@ -11,7 +11,6 @@ export default class DebianContent extends ContentAbstract {
     const containerName = this.getContainerName() == "" ? "debian" : this.getContainerName()
 
     const lineCounter = new LineCounter()
-    // const parser = new Parser()
 
     lineCounter.linePos(3)
 
@@ -25,20 +24,13 @@ export default class DebianContent extends ContentAbstract {
       }
     }
 
-    // const doc = new YAML.Document()
-
     const doc = parseDocument(dockerComposeData, { lineCounter })
 
     doc.contents = dockerComposeData
 
-    const dockerComposeYml = doc.toString()
+    let dockerComposeYml = doc.toString()
 
-//     const dockerComposeYml = `version: '3.5'
-
-// services:
-//   ${containerName}:
-//     image: debian:latest
-//     container_name: ${containerName}`;
+    dockerComposeYml = this.addBlankLine(dockerComposeYml, 1)
 
     return dockerComposeYml;
   }
