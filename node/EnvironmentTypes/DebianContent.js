@@ -18,8 +18,10 @@ export default class DebianContent extends ContentAbstract {
       version: "3.5",
       services: {
         debian: {
-          image: "debian:latest",
-          container_name: containerName
+          container_name: containerName,
+          build: {
+            context: "."
+          }
         }
       }
     }
@@ -36,6 +38,10 @@ export default class DebianContent extends ContentAbstract {
   }
 
   getDockerfileContent() {
-    return "";
+    const dockerfileContent = `FROM debian:bullseye
+
+CMD while : ; do sleep 1000; done`;
+
+    return dockerfileContent;
   }
 }

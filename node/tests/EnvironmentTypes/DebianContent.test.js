@@ -9,8 +9,9 @@ describe('DebianContent', () => {
 
 services:
   debian:
-    image: debian:latest
     container_name: debian
+    build:
+      context: .
 `
 
         expect(debianContent.generate()).toEqual(expectContent)
