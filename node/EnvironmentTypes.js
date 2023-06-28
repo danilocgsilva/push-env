@@ -5,6 +5,7 @@ import PhpApacheContent from "./EnvironmentTypes/PhpApacheContent.js";
 import NodeDebianContent from "./EnvironmentTypes/NodeDebianContent.js";
 import Node20DebianContent from "./EnvironmentTypes/Node20DebianContent.js";
 import PythonContent from "./EnvironmentTypes/PythonContent.js";
+import DebianContent from "./EnvironmentTypes/DebianContent.js";
 
 export default class EnvironmentTypes {
   #types = null;
@@ -16,7 +17,8 @@ export default class EnvironmentTypes {
       php_apache: new PhpApacheContent(),
       node_debian: new NodeDebianContent(),
       node_20_debian: new Node20DebianContent(),
-      python: new PythonContent()
+      python: new PythonContent(),
+      debian: new DebianContent()
     };
   }
   getEnvironments() {
