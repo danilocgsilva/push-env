@@ -1,11 +1,11 @@
 import NodeDebianContent from "../../EnvironmentTypes/NodeDebianContent.js"
 
 describe('NodeDebianContent', () => {
-    test('Basic', () => {
+  test('Basic', () => {
 
-        const nodeDebianContent = new NodeDebianContent()
+    const nodeDebianContent = new NodeDebianContent()
 
-        const expectContent = `version: '3.5'
+    const expectContent = `version: '3.5'
     
 services:
   node-debian:
@@ -17,6 +17,6 @@ services:
       - ./app:/app
     container_name: node-debian`
 
-        expect(nodeDebianContent.generate()).toEqual(expectContent)
-    })
+    expect(nodeDebianContent.generate()).toEqual(expectContent)
+  })
 })

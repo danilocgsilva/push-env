@@ -1,6 +1,4 @@
 import ContentAbstract from "./ContentAbstract.js";
-import YAML from "yaml"
-// import { LineCounter, Parser } from 'yaml'
 import { LineCounter, parseDocument } from 'yaml'
 
 export default class DebianContent extends ContentAbstract {
@@ -9,10 +7,6 @@ export default class DebianContent extends ContentAbstract {
   }
   generate() {
     const containerName = this.getContainerName() == "" ? "debian" : this.getContainerName()
-
-    const lineCounter = new LineCounter()
-
-    lineCounter.linePos(3)
 
     const dockerComposeData = {
       version: "3.5",
@@ -26,7 +20,7 @@ export default class DebianContent extends ContentAbstract {
       }
     }
 
-    const doc = parseDocument(dockerComposeData, { lineCounter })
+    const doc = parseDocument(dockerComposeData)
 
     doc.contents = dockerComposeData
 
