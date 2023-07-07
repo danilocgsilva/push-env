@@ -1,0 +1,9 @@
+version: '3.5'
+
+services:
+  node1:
+    container_name: node1
+    volumes:
+      - ./node1:/apps
+    build: 
+      context: .
