@@ -40,8 +40,7 @@ services:
         const dockerfileContent = `FROM php:8.2-apache-bullseye
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-RUN mkdir ./app
-WORKDIR /app
+WORKDIR /var/www/html
  
 CMD while : ; do sleep 1000; done`
 
