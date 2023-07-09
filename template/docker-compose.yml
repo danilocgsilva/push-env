@@ -4,6 +4,7 @@ services:
   node1:
     container_name: node1
     volumes:
-      - ./node1:/apps
+      - ../:/apps/push-env
+      - ~/docker-environments:/root/docker-environments
     build: 
       context: .
