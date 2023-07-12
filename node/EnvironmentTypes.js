@@ -7,6 +7,7 @@ import NodeDebianContent from "./EnvironmentTypes/NodeDebianContent.js";
 import Node20DebianContent from "./EnvironmentTypes/Node20DebianContent.js";
 import PythonContent from "./EnvironmentTypes/PythonContent.js";
 import DebianContent from "./EnvironmentTypes/DebianContent.js";
+import UbuntuContent from "./EnvironmentTypes/UbuntuContent.js";
 
 export default class EnvironmentTypes {
   #types = null;
@@ -20,7 +21,8 @@ export default class EnvironmentTypes {
       node_debian: new NodeDebianContent(),
       node_20_debian: new Node20DebianContent(),
       python: new PythonContent(),
-      debian: new DebianContent()
+      debian: new DebianContent(),
+      ubuntu: new UbuntuContent()
     };
   }
   getEnvironments() {
