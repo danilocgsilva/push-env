@@ -105,4 +105,34 @@ services:
     expect(relationalDbContent.generate()).toEqual(expectContent)
   })
 
+  test('Allow external', () => {
+
+    const relationalDbContent = new RelationalDbContent()
+
+    relationalDbContent.setExternal()
+
+    const expectContent = `version: "3.5"
+
+services:
+  database1:
+    image: mariadb:10.7
+    ports:
+      - 3309:3306
+    container_name: database1
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: phppass
+      MYSQL_USER: phpuser
+      MYSQL_PASSWORD: phppass
+      MYSQL_DATABASE: your_application
+networks:
+  network1:
+    name: bridge
+    external: true
+`
+
+    expect(relationalDbContent.generate()).toEqual(expectContent)
+  })
+
 })

@@ -3,12 +3,14 @@ import { parseDocument } from 'yaml'
 
 export default class RelationalDbContent extends ContentAbstract {
 
-  _tbPort
-
-  
   constructor() {
     super()
     this._dbPort = 3309
+    this._setExternal = false
+  }
+
+  setExternal() {
+    this._setExternal = true
   }
 
   setPort(newPort) {
@@ -34,6 +36,15 @@ export default class RelationalDbContent extends ContentAbstract {
     const dockerComposeData = {
       version: "3.5",
       services: {}
+    }
+
+    if (this._setExternal) {
+      dockerComposeData.networks = {
+        network1: {
+          name: "bridge",
+          external: true
+        }
+      }
     }
 
     dockerComposeData.services[containerName] = serviceBody
