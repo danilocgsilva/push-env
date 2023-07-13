@@ -20,6 +20,9 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
     if (optionsKeyValue[0] == "base_path") {
       configurations.baseDir = optionsKeyValue[1]
     }
+    if (optionsKeyValue[0] == "allow_external" && optionsKeyValue[1] == "true") {
+      configurations.dockerComposeYmlGenerator.setExternal()
+    }
   })
 }
 

@@ -23,6 +23,10 @@ export default class DockerComposeYmlGenerator {
         this.#generator.setHostPort(port)
     }
 
+    setExternal() {
+        this.#generator.setExternal()
+    }
+
     set containerName(containerName) {
         this.#generator.setContainerName(containerName)
     }
