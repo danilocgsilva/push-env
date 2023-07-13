@@ -31,7 +31,8 @@ services:
     volumes:
       - ./app:/var/www/html
     working_dir: /app:/var/www/html
-    container_name: ${this.getContainerName()}`;
+    container_name: ${this.getContainerName()}
+`;
 
         return dockerComposeYml;
     }
@@ -43,7 +44,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 RUN mkdir ./app
 WORKDIR /app
  
-CMD while : ; do sleep 1000; done`
+CMD while : ; do sleep 1000; done
+`
 
         return dockerfileContent
     }

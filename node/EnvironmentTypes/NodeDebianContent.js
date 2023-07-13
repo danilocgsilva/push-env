@@ -18,7 +18,8 @@ services:
       - ${dbPort}:3000
     volumes:
       - ./app:/app
-    container_name: ${containerName}`;
+    container_name: ${containerName}
+`;
 
     return dockerComposeYml;
   }

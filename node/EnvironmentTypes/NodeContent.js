@@ -14,23 +14,25 @@ export default class NodeContent extends ContentAbstract {
   generate() {
     const containerName = this.getContainerName() == "" ? "node" : this.getContainerName()
 
+    const nodeServiceBody = {
+      build: {
+        context: "."
+      },
+      ports: [
+        `${this.hostPort}:3000`
+      ],
+      volumes: [
+        './app:/app'
+      ],
+      container_name: containerName
+    }
+
     const dockerComposeData = {
       version: "3.5",
-      services: {
-        node: {
-          build: {
-            context: "."
-          },
-          ports: [
-            `${this.hostPort}:3000`
-          ],
-          volumes: [
-            './app:/app'
-          ],
-          container_name: containerName
-        }
-      }
+      services: {}
     }
+
+    dockerComposeData.services[containerName] = nodeServiceBody
 
     const doc = parseDocument(dockerComposeData)
 

@@ -1,11 +1,12 @@
 import DebianContent from "../../EnvironmentTypes/DebianContent.js"
 
 describe('DebianContent', () => {
-    test('Basic', () => {
 
-        const debianContent = new DebianContent()
+  test('Basic', () => {
 
-        const expectContent = `version: "3.5"
+    const debianContent = new DebianContent()
+
+    const expectContent = `version: "3.5"
 
 services:
   debian:
@@ -14,6 +15,24 @@ services:
       context: .
 `
 
-        expect(debianContent.generate()).toEqual(expectContent)
-    })
+    expect(debianContent.generate()).toEqual(expectContent)
+  })
+
+  test('Change Container name', () => {
+
+    const debianContent = new DebianContent()
+    debianContent.setContainerName("just_another_debian_container")
+
+    const expectContent = `version: "3.5"
+
+services:
+  just_another_debian_container:
+    container_name: just_another_debian_container
+    build:
+      context: .
+`
+
+    expect(debianContent.generate()).toEqual(expectContent)
+  })
+
 })

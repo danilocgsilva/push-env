@@ -1,9 +1,11 @@
 import ContentAbstract from "./ContentAbstract.js";
 
 export default class MongoContent extends ContentAbstract {
+
   constructor() {
     super()
   }
+  
   generate() {
     const dbPort = 27017;
     const containerName = this.getContainerName() == "" ? "mongodb" : this.getContainerName()
@@ -19,7 +21,8 @@ services:
       MYSQL_ROOT_PASSWORD: phppass
       MYSQL_USER: phpuser
       MYSQL_PASSWORD: phppass
-      MYSQL_DATABASE: your_application`;
+      MYSQL_DATABASE: your_application
+`;
 
     return dockerComposeYml;
   }

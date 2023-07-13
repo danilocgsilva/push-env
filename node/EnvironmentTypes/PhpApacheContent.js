@@ -29,7 +29,8 @@ services:
     volumes:
       - ./app:/var/www/html
     working_dir: /app:/var/www/html
-    container_name: ${this.getContainerName()}`;
+    container_name: ${this.getContainerName()}
+`;
 
     return dockerComposeYml;
   }

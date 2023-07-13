@@ -2,23 +2,27 @@ import ContentAbstract from "./ContentAbstract.js";
 import { parseDocument } from 'yaml'
 
 export default class UbuntuContent extends ContentAbstract {
+
   constructor() {
     super()
   }
+
   generate() {
     const containerName = this.getContainerName() == "" ? "ubuntu" : this.getContainerName()
 
-    const dockerComposeData = {
-      version: "3.5",
-      services: {
-        ubuntu: {
-          container_name: containerName,
-          build: {
-            context: "."
-          }
-        }
+    const serviceBody = {
+      container_name: containerName,
+      build: {
+        context: "."
       }
     }
+
+    const dockerComposeData = {
+      version: "3.5",
+      services: {}
+    }
+
+    dockerComposeData.services[containerName] = serviceBody
 
     const doc = parseDocument(dockerComposeData)
 

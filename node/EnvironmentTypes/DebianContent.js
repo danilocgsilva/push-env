@@ -1,5 +1,5 @@
 import ContentAbstract from "./ContentAbstract.js";
-import { LineCounter, parseDocument } from 'yaml'
+import { parseDocument } from 'yaml'
 
 export default class DebianContent extends ContentAbstract {
   constructor() {
@@ -8,17 +8,19 @@ export default class DebianContent extends ContentAbstract {
   generate() {
     const containerName = this.getContainerName() == "" ? "debian" : this.getContainerName()
 
-    const dockerComposeData = {
-      version: "3.5",
-      services: {
-        debian: {
-          container_name: containerName,
-          build: {
-            context: "."
-          }
-        }
+    const serviceBody = {
+      container_name: containerName,
+      build: {
+        context: "."
       }
     }
+
+    const dockerComposeData = {
+      version: "3.5",
+      services: {}
+    }
+
+    dockerComposeData.services[containerName] = serviceBody
 
     const doc = parseDocument(dockerComposeData)
 

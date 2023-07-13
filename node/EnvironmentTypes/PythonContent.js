@@ -14,7 +14,8 @@ services:
   ${containerName}:
     build:
       context: .
-    container_name: ${containerName}`
+    container_name: ${containerName}
+`
 
     return dockerComposeYml;
   }
@@ -24,6 +25,7 @@ services:
 
 RUN mkdir /app
     
-CMD while : ; do sleep 1000; done`;
+CMD while : ; do sleep 1000; done
+`;
   }
 }

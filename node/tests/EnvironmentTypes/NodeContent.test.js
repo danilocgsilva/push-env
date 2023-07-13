@@ -41,4 +41,25 @@ services:
     expect(nodeContent.generate()).toEqual(expectContent)
   })
 
+  test('Setting Container Name', () => {
+    const nodeContent = new NodeContent()
+
+    nodeContent.setContainerName("my_node_container")
+
+    const expectContent = `version: "3.5"
+
+services:
+  my_node_container:
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ./app:/app
+    container_name: my_node_container
+`
+
+    expect(nodeContent.generate()).toEqual(expectContent)
+  })
+
 })
