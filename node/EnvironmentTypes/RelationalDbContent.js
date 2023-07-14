@@ -13,7 +13,7 @@ export default class RelationalDbContent extends ContentAbstract {
     this._setExternal = true
   }
 
-  setPort(newPort) {
+  setHostPort(newPort) {
     this._dbPort = newPort
   }
 

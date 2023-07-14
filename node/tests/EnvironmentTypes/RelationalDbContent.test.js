@@ -56,7 +56,7 @@ services:
 
     const relationalDbContent = new RelationalDbContent()
 
-    relationalDbContent.setPort(3406)
+    relationalDbContent.setHostPort(3406)
 
     const expectContent = `version: "3.5"
 
@@ -82,7 +82,7 @@ services:
 
     const relationalDbContent = new RelationalDbContent()
 
-    relationalDbContent.setPort(3506)
+    relationalDbContent.setHostPort(3506)
     relationalDbContent.setContainerName("the_database")
 
     const expectContent = `version: "3.5"
