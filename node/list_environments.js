@@ -1,4 +1,4 @@
-import EnvironmentTypes from "./EnvironmentTypes.js"
+import EnvironmentTypes from "./Includes/EnvironmentTypes.js"
 
 const environmentTypes = new EnvironmentTypes()
 console.log(environmentTypes.listTypes())

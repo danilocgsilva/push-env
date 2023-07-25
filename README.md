@@ -4,7 +4,7 @@ Generates env dockerfile on the fly.
 
 ## Installing
 
-The package is based on node. Currently, you may not, or do not want to have node installed locally. In this case, you can check the `template` folder, which have a basic receipt to startup the push-env.
+The package is based on node. Maybe do not want or do not have node installed locally. In this case, you can check the `template` folder, which have a basic receipt to startup the push-env.
 
 ## How to use
 
@@ -28,7 +28,13 @@ Currently, `THE_NAME_OF_ENVIRONMENT` is the type of environment that you want to
 * relationaldb
 * mongo
 * php_apache
+* php
 * node_debian
 * node_20_debian
 * python
 
+## Notes for development
+
+You will find the `devtools.js`. This script intent is to faclitate implements some further docker templates. Currently, its unique capability is just to add a new template class to be written in the way that a new docker contante can be generated. You type and execute: `node devtools.js <className>`, where:
+
+* `className` is used to be the file name as well that will be located in the `EnvironmentTypes` folder.

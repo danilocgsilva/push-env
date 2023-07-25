@@ -1,4 +1,4 @@
-import GeneratorNotImplementedException from "./Exceptions/GeneratorNotImplementedException.js";
+import GeneratorNotImplementedException from "../Exceptions/GeneratorNotImplementedException.js";
 
 export default class DockerComposeYmlGenerator {
     #generator = null

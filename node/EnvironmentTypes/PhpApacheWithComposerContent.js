@@ -2,25 +2,25 @@ import ContentAbstract from "./ContentAbstract.js";
 
 export default class PhpApacheWithComposerContent extends ContentAbstract {
 
-    #hostPort
+  #hostPort
 
-    constructor() {
-        super()
-        this.#hostPort = ""
+  constructor() {
+    super()
+    this.#hostPort = ""
+  }
+
+  setHostPort(hostPort) {
+    this.#hostPort = hostPort
+  }
+
+  generate() {
+    this.#hostPort = this.#hostPort == "" ? 80 : this.#hostPort
+
+    if (this.getContainerName() == "") {
+      this.setContainerName("php-apache-composer")
     }
 
-    setHostPort(hostPort) {
-        this.#hostPort = hostPort
-    }
-
-    generate() {
-        this.#hostPort = this.#hostPort == "" ? 80 : this.#hostPort
-
-        if (this.getContainerName() == "") {
-            this.setContainerName("php-apache-composer")
-        }
-
-        const dockerComposeYml = `version: '3.5'
+    const dockerComposeYml = `version: '3.5'
 
 services:
   ${this.getContainerName()}:
@@ -34,11 +34,11 @@ services:
     container_name: ${this.getContainerName()}
 `;
 
-        return dockerComposeYml;
-    }
+    return dockerComposeYml;
+  }
 
-    getDockerfileContent() {
-        const dockerfileContent = `FROM php:8.2-apache-bullseye
+  getDockerfileContent() {
+    const dockerfileContent = `FROM php:8.2-apache-bullseye
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 RUN mkdir ./app
@@ -47,6 +47,6 @@ WORKDIR /app
 CMD while : ; do sleep 1000; done
 `
 
-        return dockerfileContent
-    }
+    return dockerfileContent
+  }
 }

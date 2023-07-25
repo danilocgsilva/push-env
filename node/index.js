@@ -1,30 +1,12 @@
-import DockerComposeYmlGenerator from "./DockerComposeYmlGenerator.js";
-import { FileWritter } from "./FileWritter.js";
+import DockerComposeYmlGenerator from "./Includes/DockerComposeYmlGenerator.js";
+import configureFileWritter from "./Includes/configureFileWritter.js";
+import EnvironmentTypes from "./Includes/EnvironmentTypes.js";
+import configureFromParameters from "./Includes/configureFromParameters.js"
+import { FileWritter } from "./Includes/FileWritter.js";
 import MissingQueryException from "./Exceptions/MissingQueryException.js";
 import GeneratorNotImplementedException from "./Exceptions/GeneratorNotImplementedException.js";
-import EnvironmentTypes from "./EnvironmentTypes.js";
-import configureFileWritter from "./configureFileWritter.js";
 import { homedir } from 'os'
 import path from 'path';
-
-const configureFromParameters = (configurations, additionalConfsFromCommandLice) => {
-  additionalConfsFromCommandLice.forEach(confData => {
-    const optionsKeyValue = confData.split(":")
-    if (optionsKeyValue[0] == "hostport") {
-      configurations.dockerComposeYmlGenerator.setHostPort(optionsKeyValue[1])
-    }
-    if (optionsKeyValue[0] == "container_name") {
-      configurations.dockerComposeYmlGenerator.containerName = optionsKeyValue[1]
-      configurations.queriedEnvironment += "-" + optionsKeyValue[1]
-    }
-    if (optionsKeyValue[0] == "base_path") {
-      configurations.baseDir = optionsKeyValue[1]
-    }
-    if (optionsKeyValue[0] == "allow_external" && optionsKeyValue[1] == "true") {
-      configurations.dockerComposeYmlGenerator.setExternal()
-    }
-  })
-}
 
 const environmentAskedName = process.argv[2];
 if (!environmentAskedName) {
@@ -43,15 +25,12 @@ try {
 
   configureFromParameters(configurations, additionalConfsFromCommandLice)
 
-  if (configurations.baseDir == "") {
-    configurations.baseDir = path.resolve(homedir(), "docker-environments", configurations.queriedEnvironment)
-  }
+  configurations.baseDir = path.resolve(homedir(), "docker-environments", configurations.queriedEnvironment)
 
   const filePath = configureFileWritter(
     fileWriter, 
     configurations.baseDir, 
-    configurations.dockerComposeYmlGenerator, 
-    configurations.queriedEnvironment,
+    configurations.dockerComposeYmlGenerator
   )
   await fileWriter.write();
   console.log(
