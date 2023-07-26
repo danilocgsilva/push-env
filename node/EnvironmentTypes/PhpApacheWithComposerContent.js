@@ -1,4 +1,6 @@
 import ContentAbstract from "./ContentAbstract.js";
+import { parseDocument } from 'yaml'
+
 
 export default class PhpApacheWithComposerContent extends ContentAbstract {
 
@@ -20,19 +22,38 @@ export default class PhpApacheWithComposerContent extends ContentAbstract {
       this.setContainerName("php-apache-composer")
     }
 
-    const dockerComposeYml = `version: '3.5'
+    const dockerComposeData = {
+      version: "3.5",
+      services: {}
+    }
 
-services:
-  ${this.getContainerName()}:
-    build:
-      context: .
-    ports:
-      - ${this.#hostPort}:80
-    volumes:
-      - ./app:/var/www/html
-    working_dir: /app:/var/www/html
-    container_name: ${this.getContainerName()}
-`;
+    const nodeServiceBody = {
+      build: {
+        context: "."
+      },
+      ports: [
+        `${this.#hostPort}:80`
+      ],
+      volumes: [
+        './app:/var/www/html'
+      ],
+      working_dir: "/app:/var/www/html",
+      container_name: this.getContainerName()
+    }
+
+    if (this.getNetworkMode() !== "") {
+      nodeServiceBody.network_mode = this.getNetworkMode()
+    }
+
+    dockerComposeData.services[this.getContainerName()] = nodeServiceBody
+
+    const doc = parseDocument(dockerComposeData)
+
+    doc.contents = dockerComposeData
+
+    let dockerComposeYml = doc.toString()
+
+    dockerComposeYml = this.addBlankLine(dockerComposeYml, 1)
 
     return dockerComposeYml;
   }

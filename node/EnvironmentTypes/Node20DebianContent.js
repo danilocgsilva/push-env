@@ -1,4 +1,5 @@
 import ContentAbstract from "./ContentAbstract.js";
+import { parseDocument } from 'yaml'
 
 export default class Node20DebianContent extends ContentAbstract {
   constructor() {
@@ -8,18 +9,39 @@ export default class Node20DebianContent extends ContentAbstract {
   generate() {
     const dbPort = 3002;
     const containerName = this.getContainerName() == "" ? "node-20-debian" : this.getContainerName()
-    const dockerComposeYml = `version: '3.5'
 
-services:
-  ${containerName}:
-    build:
-      context: .
-    ports:
-      - ${dbPort}:3000
-    volumes:
-      - ./app:/app
-    container_name: ${containerName}`;
+    const dockerComposeData = {
+      version: "3.5",
+      services: {}
+    }    
 
+    const nodeServiceBody = {
+      build: {
+        context: "."
+      },
+      ports: [
+        `${dbPort}:3000`
+      ],
+      volumes: [
+        './app:/app'
+      ],
+      container_name: containerName
+    }
+
+    if (this.getNetworkMode() !== "") {
+      nodeServiceBody.network_mode = this.getNetworkMode()
+    }
+
+    dockerComposeData.services[containerName] = nodeServiceBody
+
+    const doc = parseDocument(dockerComposeData)
+
+    doc.contents = dockerComposeData
+
+    let dockerComposeYml = doc.toString()
+
+    dockerComposeYml = this.addBlankLine(dockerComposeYml, 1)
+    
     return dockerComposeYml;
   }
 

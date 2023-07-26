@@ -1,8 +1,10 @@
 export default class ContentAbstract {
   _containerName
+  #networkMode
 
   constructor() {
     this._containerName = ""
+    this.#networkMode = ""
   }
 
   setContainerName(containerName) {
@@ -11,6 +13,14 @@ export default class ContentAbstract {
 
   getContainerName() {
     return this._containerName
+  }
+
+  setNetworkMode(networkMode) {
+    this.#networkMode = networkMode
+  }
+
+  getNetworkMode() {
+    return this.#networkMode
   }
 
   addBlankLine(stringToInsertBlankLine, lineNumber) {

@@ -2,11 +2,15 @@ import PhpApacheWithComposerContent from "../../EnvironmentTypes/PhpApacheWithCo
 
 describe('PhpApacheContent', () => {
 
+  let phpApacheWithComposerContent
+
+  beforeAll((done) => {
+    phpApacheWithComposerContent = new PhpApacheWithComposerContent()
+    done()
+  })
+
   test('Basic', () => {
-
-    const phpApacheWithComposerContent = new PhpApacheWithComposerContent()
-
-    const expectContent = `version: '3.5'
+    const expectContent = `version: "3.5"
 
 services:
   php-apache-composer:
@@ -24,9 +28,6 @@ services:
   })
 
   test('getDockerfileContent', () => {
-
-    const phpApacheWithComposerContent = new PhpApacheWithComposerContent()
-
     const expectContent = `FROM php:8.2-apache-bullseye
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
@@ -40,12 +41,9 @@ CMD while : ; do sleep 1000; done
   })
 
   test('Change Container Name', () => {
-
-    const phpApacheWithComposerContent = new PhpApacheWithComposerContent()
-
     phpApacheWithComposerContent.setContainerName("php_apache_and_composer")
 
-    const expectContent = `version: '3.5'
+    const expectContent = `version: "3.5"
 
 services:
   php_apache_and_composer:
@@ -61,4 +59,25 @@ services:
 
     expect(phpApacheWithComposerContent.generate()).toEqual(expectContent)
   })
+
+  test('Set network mode', () => {
+    phpApacheWithComposerContent.setNetworkMode("host")
+    const expectContent = `version: "3.5"
+
+services:
+  php_apache_and_composer:
+    build:
+      context: .
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/var/www/html
+    working_dir: /app:/var/www/html
+    container_name: php_apache_and_composer
+    network_mode: host
+`
+
+    expect(phpApacheWithComposerContent.generate()).toEqual(expectContent)
+  })
+
 })
