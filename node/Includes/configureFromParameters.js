@@ -1,17 +1,21 @@
 const configureFromParameters = (configurations, additionalConfsFromCommandLice) => {
   additionalConfsFromCommandLice.forEach(confData => {
     const optionsKeyValue = confData.split(":")
-    if (optionsKeyValue[0] == "hostport") {
-      configurations.dockerComposeYmlGenerator.setHostPort(optionsKeyValue[1])
+
+    const keyFromCli = optionsKeyValue[0]
+    const valueFromCli = optionsKeyValue[1]
+    
+    if (keyFromCli == "hostport") {
+      configurations.dockerComposeYmlGenerator.setHostPort(valueFromCli)
     }
-    if (optionsKeyValue[0] == "container_name") {
-      configurations.dockerComposeYmlGenerator.containerName = optionsKeyValue[1]
-      configurations.queriedEnvironment += "-" + optionsKeyValue[1]
+    if (keyFromCli == "container_name") {
+      configurations.dockerComposeYmlGenerator.containerName = valueFromCli
+      configurations.queriedEnvironment += "-" + valueFromCli
     }
-    if (optionsKeyValue[0] == "base_path") {
-      configurations.baseDir = optionsKeyValue[1]
+    if (keyFromCli == "base_path") {
+      configurations.baseDir = valueFromCli
     }
-    if (optionsKeyValue[0] == "allow_external" && optionsKeyValue[1] == "true") {
+    if (keyFromCli == "allow_external" && valueFromCli == "true") {
       configurations.dockerComposeYmlGenerator.setExternal()
     }
   })

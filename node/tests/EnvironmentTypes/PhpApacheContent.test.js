@@ -1,4 +1,7 @@
 import PhpApacheContent from "../../EnvironmentTypes/PhpApacheContent.js"
+import configureFromParameters from "../../Includes/configureFromParameters.js"
+import DockerComposeYmlGenerator from "../../Includes/DockerComposeYmlGenerator.js"
+import EnvironmentTypes from "../../Includes/EnvironmentTypes.js"
 
 describe('PhpApacheContent', () => {
 
@@ -42,6 +45,14 @@ services:
 `
 
     expect(phpApacheContent.generate()).toEqual(expectContent)
+  })
+
+  test('Select port', () => {
+    const additionalConfsFromCommandLice = ["hostport:82"]
+    const configureation = {
+      dockerComposeYmlGenerator: new DockerComposeYmlGenerator("php_apache", new EnvironmentTypes()),
+    }
+    configureFromParameters(configureation, additionalConfsFromCommandLice)
   })
 
 })
