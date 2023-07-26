@@ -1,7 +1,6 @@
 import ContentAbstract from "./ContentAbstract.js";
 import { parseDocument } from 'yaml'
 
-
 export default class PhpApacheWithComposerContent extends ContentAbstract {
 
   #hostPort

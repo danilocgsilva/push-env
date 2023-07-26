@@ -27,6 +27,10 @@ export default class DockerComposeYmlGenerator {
         this.#generator.setExternal()
     }
 
+    setNetworkMode(network_mode) {
+        this.#generator.setNetworkMode(network_mode)
+    }
+
     set containerName(containerName) {
         this.#generator.setContainerName(containerName)
     }
