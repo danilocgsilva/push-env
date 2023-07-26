@@ -22,6 +22,10 @@ export default class UbuntuContent extends ContentAbstract {
       services: {}
     }
 
+    if (this.getNetworkMode() !== "") {
+      serviceBody.network_mode = this.getNetworkMode()
+    }
+
     dockerComposeData.services[containerName] = serviceBody
 
     const doc = parseDocument(dockerComposeData)

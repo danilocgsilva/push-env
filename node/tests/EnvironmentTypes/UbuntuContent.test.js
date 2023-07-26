@@ -35,4 +35,21 @@ services:
     expect(ubuntuContent.generate()).toEqual(expectContent)
   })
 
+  test('Set network mode', () => {
+    const ubuntuContent = new UbuntuContent()
+
+    ubuntuContent.setNetworkMode("host")
+    const expectContent = `version: "3.5"
+
+services:
+  ubuntu:
+    container_name: ubuntu
+    build:
+      context: .
+    network_mode: host
+`
+
+    expect(ubuntuContent.generate()).toEqual(expectContent)
+  })
+
 })

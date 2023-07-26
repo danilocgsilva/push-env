@@ -9,6 +9,7 @@ const message = `Some options also is allowed:
 * container_name
 * base_path
 * set_external
+* network_mode
 
 For any of the available options, you can use its just as follows in the command line: hostport:<value>
 

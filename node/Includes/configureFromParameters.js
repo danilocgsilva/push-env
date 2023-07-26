@@ -18,6 +18,9 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
     if (keyFromCli == "allow_external" && valueFromCli == "true") {
       configurations.dockerComposeYmlGenerator.setExternal()
     }
+    if (keyFromCli == "network_mode") {
+      configurations.dockerComposeYmlGenerator.setNetworkMode(valueFromCli)
+    }
   })
 }
 
