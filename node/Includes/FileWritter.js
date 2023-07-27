@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import ShallNotReplaceFile from "../Exceptions/ShallNotReplaceFile.js"
 
 export class FileWritter {
   #filePath = null
@@ -45,6 +46,11 @@ export class FileWritter {
   }
 
   async writeDockerComposeYmlFile() {
+
+    if (fs.existsSync(this.#filePath)) {
+      throw new ShallNotReplaceFile()
+    }
+    
     await fs.writeFile(this.#filePath, this.#fileContent, (err) => {
       if (err) {
         console.error(err);
