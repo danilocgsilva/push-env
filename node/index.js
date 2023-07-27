@@ -25,7 +25,7 @@ try {
 
   configureFromParameters(configurations, additionalConfsFromCommandLice)
 
-  configurations.baseDir = path.resolve(homedir(), "docker-environments", configurations.queriedEnvironment)
+  configurations.baseDir = path.resolve(homedir(), "docker-environments", environmentAskedName)
 
   const filePath = configureFileWritter(
     fileWriter, 

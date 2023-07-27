@@ -55,4 +55,22 @@ services:
     configureFromParameters(configureation, additionalConfsFromCommandLice)
   })
 
+  test('Change php version', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setPhpVersion("8.1")
+    const expectContent = `version: '3.5'
+
+services:
+  php-apache:
+    image: php:8.1-apache-bullseye
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/var/www/html
+    working_dir: /app:/var/www/html
+    container_name: php-apache
+`
+    expect(phpApacheContent.generate()).toEqual(expectContent)
+  })
+
 })

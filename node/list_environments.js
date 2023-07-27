@@ -10,6 +10,7 @@ const message = `Some options also is allowed:
 * base_path
 * set_external
 * network_mode
+* php_version
 
 For any of the available options, you can use its just as follows in the command line: hostport:<value>
 

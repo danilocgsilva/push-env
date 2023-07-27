@@ -34,4 +34,16 @@ export default class DockerComposeYmlGenerator {
     set containerName(containerName) {
         this.#generator.setContainerName(containerName)
     }
+
+    getHostPort() {
+        return this.#generator.getHostPort()
+    }
+
+    setPhpVersion(phpVersion) {
+        return this.#generator.setPhpVersion(phpVersion)
+    }
+
+    getPhpVersion() {
+        return this.#generator.getPhpVersion()
+    }
 }

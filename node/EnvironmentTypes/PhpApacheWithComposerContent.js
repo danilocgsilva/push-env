@@ -46,13 +46,7 @@ export default class PhpApacheWithComposerContent extends ContentAbstract {
 
     dockerComposeData.services[this.getContainerName()] = nodeServiceBody
 
-    const doc = parseDocument(dockerComposeData)
-
-    doc.contents = dockerComposeData
-
-    let dockerComposeYml = doc.toString()
-
-    dockerComposeYml = this.addBlankLine(dockerComposeYml, 1)
+    const dockerComposeYml = this.getContentFinalStringFromYml(dockerComposeData)
 
     return dockerComposeYml;
   }
@@ -68,5 +62,9 @@ CMD while : ; do sleep 1000; done
 `
 
     return dockerfileContent
+  }
+
+  getPhpVersion() {
+    return "8.2"
   }
 }

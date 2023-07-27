@@ -2,14 +2,20 @@ import ContentAbstract from "./ContentAbstract.js";
 
 export default class PhpApacheContent extends ContentAbstract {
   #hostPort
+  #phpVersion
 
   constructor() {
     super()
     this.#hostPort = ""
+    this.#phpVersion = "8.2"
   }
 
   setHostPort(hostPort) {
     this.#hostPort = hostPort
+  }
+
+  getHostPort() {
+    return this.#hostPort
   }
   
   generate() {
@@ -23,7 +29,7 @@ export default class PhpApacheContent extends ContentAbstract {
 
 services:
   ${this.getContainerName()}:
-    image: php:8.2-apache-bullseye
+    image: php:${this.#phpVersion}-apache-bullseye
     ports:
       - ${this.#hostPort}:80
     volumes:
@@ -37,5 +43,13 @@ services:
 
   getDockerfileContent() {
     return "";
+  }
+
+  getPhpVersion() {
+    return this.#phpVersion
+  }
+
+  setPhpVersion(phpVersion) {
+    this.#phpVersion = phpVersion
   }
 }

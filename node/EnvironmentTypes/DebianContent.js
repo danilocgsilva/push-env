@@ -1,10 +1,10 @@
 import ContentAbstract from "./ContentAbstract.js";
-import { parseDocument } from 'yaml'
 
 export default class DebianContent extends ContentAbstract {
   constructor() {
     super()
   }
+
   generate() {
     const containerName = this.getContainerName() == "" ? "debian" : this.getContainerName()
 
@@ -22,13 +22,7 @@ export default class DebianContent extends ContentAbstract {
 
     dockerComposeData.services[containerName] = serviceBody
 
-    const doc = parseDocument(dockerComposeData)
-
-    doc.contents = dockerComposeData
-
-    let dockerComposeYml = doc.toString()
-
-    dockerComposeYml = this.addBlankLine(dockerComposeYml, 1)
+    const dockerComposeYml = this.getContentFinalStringFromYml(dockerComposeData)
 
     return dockerComposeYml;
   }

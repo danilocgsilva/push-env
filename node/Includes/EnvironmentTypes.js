@@ -14,17 +14,17 @@ export default class EnvironmentTypes {
   #types = null;
   constructor() {
     this.#types = {
+      debian: new DebianContent(),
       node: new NodeContent(),
       relationaldb: new RelationalDb(),
       mongo: new MongoContent(),
       php_apache: new PhpApacheContent(),
       php_apache_composer: new PhpApacheWithComposerContent(),
+      php: new PHPContent(),
       node_debian: new NodeDebianContent(),
       node_20_debian: new Node20DebianContent(),
       python: new PythonContent(),
-      debian: new DebianContent(),
-      ubuntu: new UbuntuContent(),
-      php: new PHPContent()
+      ubuntu: new UbuntuContent()
     };
   }
   getEnvironments() {

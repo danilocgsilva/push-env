@@ -5,7 +5,7 @@ describe('MongoContent', () => {
   test('Basic', () => {
     const mongoContent = new MongoContent()
 
-    const expectedContent = `version: '3.5'
+    const expectedContent = `version: "3.5"
 
 services:
   mongodb:
@@ -28,7 +28,7 @@ services:
 
     mongoContent.setContainerName("my_mongodb_container")
 
-    const expectedContent = `version: '3.5'
+    const expectedContent = `version: "3.5"
 
 services:
   my_mongodb_container:

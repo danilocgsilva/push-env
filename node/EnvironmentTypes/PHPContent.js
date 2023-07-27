@@ -23,12 +23,7 @@ export default class PHPContent extends ContentAbstract {
 
     dockerComposeData.services[containerName] = serviceBody
 
-    const doc = parseDocument(dockerComposeData)
-
-    doc.contents = dockerComposeData
-
-    let dockerComposeYml = doc.toString()
-    dockerComposeYml = this.addBlankLine(dockerComposeYml, 1)
+    const dockerComposeYml = this.getContentFinalStringFromYml(dockerComposeData)
 
     return dockerComposeYml;
   }

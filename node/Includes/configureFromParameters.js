@@ -21,6 +21,9 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
     if (keyFromCli == "network_mode") {
       configurations.dockerComposeYmlGenerator.setNetworkMode(valueFromCli)
     }
+    if (keyFromCli == "php_version") {
+      configurations.dockerComposeYmlGenerator.setPhpVersion(valueFromCli)
+    }
   })
 }
 
