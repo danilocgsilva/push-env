@@ -33,8 +33,9 @@ services:
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 RUN mkdir ./app
 WORKDIR /app
- 
-CMD while : ; do sleep 1000; done
+EXPOSE 80
+ENTRYPOINT [ "/usr/sbin/apachectl" ]
+CMD ["-D", "FOREGROUND"]
 `
 
     expect(phpApacheWithComposerContent.getDockerfileContent()).toEqual(expectContent)

@@ -7,7 +7,7 @@ export default class PhpApacheWithComposerContent extends ContentAbstract {
 
   constructor() {
     super()
-    this.#hostPort = ""
+    this.#hostPort = "80"
   }
 
   setHostPort(hostPort) {
@@ -15,8 +15,6 @@ export default class PhpApacheWithComposerContent extends ContentAbstract {
   }
 
   generate() {
-    this.#hostPort = this.#hostPort == "" ? 80 : this.#hostPort
-
     if (this.getContainerName() == "") {
       this.setContainerName("php-apache-composer")
     }
@@ -57,8 +55,9 @@ export default class PhpApacheWithComposerContent extends ContentAbstract {
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 RUN mkdir ./app
 WORKDIR /app
- 
-CMD while : ; do sleep 1000; done
+EXPOSE 80
+ENTRYPOINT [ "/usr/sbin/apachectl" ]
+CMD ["-D", "FOREGROUND"]
 `
 
     return dockerfileContent
