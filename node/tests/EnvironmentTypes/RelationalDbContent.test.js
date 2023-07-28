@@ -135,4 +135,27 @@ networks:
     expect(relationalDbContent.generate()).toEqual(expectContent)
   })
 
+  test('Template with network_mode changed to host', () => {
+    const relationalDbContent = new RelationalDbContent()
+    relationalDbContent.setNetworkMode("host")
+
+    const expectContent = `version: "3.5"
+
+services:
+  database1:
+    image: mariadb:10.7
+    container_name: database1
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: phppass
+      MYSQL_USER: phpuser
+      MYSQL_PASSWORD: phppass
+      MYSQL_DATABASE: your_application
+    network_mode: host
+`
+
+expect(relationalDbContent.generate()).toEqual(expectContent)
+
+  })
 })

@@ -21,16 +21,27 @@ export default class RelationalDbContent extends ContentAbstract {
     const containerName = this.getContainerName() == "" ? "database1" : this.getContainerName()
 
     const serviceBody = {
-      image: "mariadb:10.7",
-      ports: [`${this._dbPort}:3306`],
-      container_name: containerName,
-      volumes: ["./data/mysql:/var/lib/mysql"],
-      environment: {
-        MYSQL_ROOT_PASSWORD: "phppass",
-        MYSQL_USER: "phpuser",
-        MYSQL_PASSWORD: "phppass",
-        MYSQL_DATABASE: "your_application",
-      }
+      image: "mariadb:10.7"
+    }
+
+    if (this.getNetworkMode() == "") {
+      serviceBody.ports = [`${this._dbPort}:3306`]
+    }
+
+    serviceBody.container_name = containerName
+    serviceBody.volumes = ["./data/mysql:/var/lib/mysql"]
+
+    const environment = {
+      MYSQL_ROOT_PASSWORD: "phppass",
+      MYSQL_USER: "phpuser",
+      MYSQL_PASSWORD: "phppass",
+      MYSQL_DATABASE: "your_application"
+    }
+
+    serviceBody.environment = environment
+
+    if (this.getNetworkMode() != "") {
+      serviceBody.network_mode = this.getNetworkMode()
     }
 
     const dockerComposeData = {
@@ -49,13 +60,7 @@ export default class RelationalDbContent extends ContentAbstract {
 
     dockerComposeData.services[containerName] = serviceBody
 
-    const doc = parseDocument(dockerComposeData)
-
-    doc.contents = dockerComposeData
-
-    let dockerComposeYml = doc.toString()
-
-    dockerComposeYml = this.addBlankLine(dockerComposeYml, 1)
+    const dockerComposeYml = this.getContentFinalStringFromYml(dockerComposeData)
 
     return dockerComposeYml;
   }
