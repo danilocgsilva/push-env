@@ -35,4 +35,20 @@ services:
     expect(phpContent.generate()).toEqual(expectContent)
   })
 
+  test('Network mode', () => {
+    const phpContent = new PHPContent()
+
+    phpContent.setNetworkMode("host")
+
+    const expectContent = `version: "3.5"
+
+services:
+  php:
+    container_name: php
+    build:
+      context: .
+    network_mode: host
+`
+    expect(phpContent.generate()).toEqual(expectContent)
+  })
 })

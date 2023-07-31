@@ -17,7 +17,7 @@ export default class PhpApacheContent extends ContentAbstract {
   getHostPort() {
     return this.#hostPort
   }
-  
+
   generate() {
     this.#hostPort = this.#hostPort == "" ? 80 : this.#hostPort
 
@@ -25,20 +25,29 @@ export default class PhpApacheContent extends ContentAbstract {
       this.setContainerName("php-apache")
     }
 
-    const dockerComposeYml = `version: '3.5'
+    const dockerComposeData = {
+      version: "3.5",
+      services: {}
+    }
 
-services:
-  ${this.getContainerName()}:
-    image: php:${this.#phpVersion}-apache-bullseye
-    ports:
-      - ${this.#hostPort}:80
-    volumes:
-      - ./app:/var/www/html
-    working_dir: /app:/var/www/html
-    container_name: ${this.getContainerName()}
-`;
+    const serviceBody = {
+      image: `php:${this.#phpVersion}-apache-bullseye`,
+      ports: ["80:80"],
+      volumes: ["./app:/var/www/html"],
+      working_dir: "/var/www/html",
+      container_name: this.getContainerName()
+    }
 
-    return dockerComposeYml;
+    const networkMode = this.getNetworkMode()
+    if (networkMode != "") {
+      serviceBody.network_mode = networkMode
+    }
+
+    dockerComposeData.services[this.getContainerName()] = serviceBody
+
+    const dockerComposeYml = this.getContentFinalStringFromYml(dockerComposeData)
+
+    return dockerComposeYml
   }
 
   getDockerfileContent() {

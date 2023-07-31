@@ -1,5 +1,4 @@
 import ContentAbstract from "./ContentAbstract.js";
-import { parseDocument } from 'yaml'
 
 export default class PHPContent extends ContentAbstract {
 
@@ -19,6 +18,11 @@ export default class PHPContent extends ContentAbstract {
     const dockerComposeData = {
       version: "3.5",
       services: {}
+    }
+
+    const networkMode = this.getNetworkMode()
+    if (networkMode != "") {
+      serviceBody.network_mode = networkMode
     }
 
     dockerComposeData.services[containerName] = serviceBody
