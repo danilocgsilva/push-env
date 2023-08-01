@@ -1,4 +1,9 @@
 const configureFromParameters = (configurations, additionalConfsFromCommandLice) => {
+
+  const noticeChanges = {
+    "container_name": null
+  }
+  
   additionalConfsFromCommandLice.forEach(confData => {
     const optionsKeyValue = confData.split(":")
 
@@ -11,6 +16,8 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
     if (keyFromCli == "container_name") {
       configurations.dockerComposeYmlGenerator.containerName = valueFromCli
       configurations.queriedEnvironment += "-" + valueFromCli
+      noticeChanges.container_name = valueFromCli
+
     }
     if (keyFromCli == "base_path") {
       configurations.baseDir = valueFromCli
@@ -25,6 +32,8 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
       configurations.dockerComposeYmlGenerator.setPhpVersion(valueFromCli)
     }
   })
+
+  return noticeChanges
 }
 
 export default configureFromParameters
