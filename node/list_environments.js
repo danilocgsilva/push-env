@@ -11,6 +11,7 @@ const message = `Some options also is allowed:
 * set_external
 * network_mode
 * php_version
+* dev (only for php_apache, and shoud receive yes or true)
 
 For any of the available options, you can use its just as follows in the command line: hostport:<value>
 
