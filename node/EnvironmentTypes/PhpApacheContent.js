@@ -64,6 +64,7 @@ export default class PhpApacheContent extends ContentAbstract {
   getDockerfileContent() {
     const dockerfileContent = `FROM php:8.2-apache-bullseye
 
+RUN apt-get update
 RUN apt-get install vim zip -y
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 RUN pecl install xdebug && docker-php-ext-enable xdebug
