@@ -91,4 +91,51 @@ services:
 `
     expect(phpApacheContent.generate()).toEqual(expectContent)
   })
+
+  test('Php Apache Composer with development packages - Dockerfile', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setDevelopmentCommons()
+
+    const expectedContent = `FROM php:8.2-apache-bullseye
+
+RUN apt-get install vim zip -y
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN mkdir ./app
+WORKDIR /app
+EXPOSE 80
+ENTRYPOINT [ "/usr/sbin/apachectl" ]
+CMD ["-D", "FOREGROUND"]
+`
+
+    const objectContentResult = phpApacheContent.getDockerfileContent()
+
+    expect(
+      objectContentResult
+    ).toEqual(
+      expectedContent
+    )
+  })
+
+
+  test('Php Apache Composer with development packages - docker-compose.yml', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setDevelopmentCommons()
+    const expectContent = `version: "3.5"
+
+services:
+  php-apache:
+    build:
+      context: .
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/var/www/html
+    working_dir: /var/www/html
+    container_name: php-apache
+`
+    const generatedContent = phpApacheContent.generate()
+
+    expect(generatedContent).toEqual(expectContent)
+  })
+
 })

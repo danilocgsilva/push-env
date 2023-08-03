@@ -9,7 +9,7 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
 
     const keyFromCli = optionsKeyValue[0]
     const valueFromCli = optionsKeyValue[1]
-    
+
     if (keyFromCli == "hostport") {
       configurations.dockerComposeYmlGenerator.setHostPort(valueFromCli)
     }
@@ -30,6 +30,13 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
     }
     if (keyFromCli == "php_version") {
       configurations.dockerComposeYmlGenerator.setPhpVersion(valueFromCli)
+    }
+    if (keyFromCli == "dev") {
+      if (valueFromCli == "yes" || valueFromCli == "true") {
+        configurations.dockerComposeYmlGenerator.setDevelopmentCommons()
+      } else {
+        throw new Error("The provided value for the dev context is not known.")
+      }
     }
   })
 

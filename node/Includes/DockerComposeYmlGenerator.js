@@ -46,4 +46,8 @@ export default class DockerComposeYmlGenerator {
     getPhpVersion() {
         return this.#generator.getPhpVersion()
     }
+
+    setDevelopmentCommons() {
+        return this.#generator.setDevelopmentCommons()
+    }
 }

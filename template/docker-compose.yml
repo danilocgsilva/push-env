@@ -8,3 +8,4 @@ services:
       - ~/docker-environments:/root/docker-environments
     build: 
       context: .
+    restart: always
