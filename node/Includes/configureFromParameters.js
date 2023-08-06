@@ -1,4 +1,4 @@
-const processSingleInput = (confData, configurations) => {
+const processSingleInput = (confData, configurations, noticeChanges) => {
   const optionsKeyValue = confData.split(":")
 
   const keyFromCli = optionsKeyValue[0]
@@ -43,7 +43,7 @@ const configureFromParameters = (configurations, additionalConfsFromCommandLice)
     if (confData == "help") {
       noticeChanges.help = true
     } else {
-      processSingleInput(confData, configurations)
+      processSingleInput(confData, configurations, noticeChanges)
     }
   })
 
