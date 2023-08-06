@@ -49,10 +49,10 @@ try {
   }
   const noticeChanges = configureFromParameters(configurations, additionalConfsFromCommandLice)
   
-  if (!noticeChanges.help) {
-    processFileWritting(noticeChanges, configurations, filePath, fileWriter)
-  } else {
+  if (noticeChanges.help) {
     console.log(configurations.dockerComposeYmlGenerator.help())
+  } else {
+    processFileWritting(noticeChanges, configurations, filePath, fileWriter)
   }
 
 } catch (e) {

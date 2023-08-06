@@ -1,53 +1,57 @@
 import GeneratorNotImplementedException from "../Exceptions/GeneratorNotImplementedException.js";
 
 export default class DockerComposeYmlGenerator {
-    #generator = null
-    constructor(environmentType, environmentTypesO) {
-        const environmentTypes = environmentTypesO.getEnvironments()
-        const generator = environmentTypes[environmentType];
-        if (!generator) {
-            throw new GeneratorNotImplementedException()
-        }
-        this.#generator = generator
+  #generator = null
+  constructor(environmentType, environmentTypesO) {
+    const environmentTypes = environmentTypesO.getEnvironments()
+    const generator = environmentTypes[environmentType];
+    if (!generator) {
+      throw new GeneratorNotImplementedException()
     }
+    this.#generator = generator
+  }
 
-    generate() {
-        return this.#generator.generate()
-    }
+  generate() {
+    return this.#generator.generate()
+  }
 
-    getDockerfileContent() {
-        return this.#generator.getDockerfileContent()
-    }
+  getDockerfileContent() {
+    return this.#generator.getDockerfileContent()
+  }
 
-    setHostPort(port) {
-        this.#generator.setHostPort(port)
-    }
+  help() {
+    return this.#generator.help()
+  }
 
-    setExternal() {
-        this.#generator.setExternal()
-    }
+  setHostPort(port) {
+    this.#generator.setHostPort(port)
+  }
 
-    setNetworkMode(network_mode) {
-        this.#generator.setNetworkMode(network_mode)
-    }
+  setExternal() {
+    this.#generator.setExternal()
+  }
 
-    set containerName(containerName) {
-        this.#generator.setContainerName(containerName)
-    }
+  setNetworkMode(network_mode) {
+    this.#generator.setNetworkMode(network_mode)
+  }
 
-    getHostPort() {
-        return this.#generator.getHostPort()
-    }
+  set containerName(containerName) {
+    this.#generator.setContainerName(containerName)
+  }
 
-    setPhpVersion(phpVersion) {
-        return this.#generator.setPhpVersion(phpVersion)
-    }
+  getHostPort() {
+    return this.#generator.getHostPort()
+  }
 
-    getPhpVersion() {
-        return this.#generator.getPhpVersion()
-    }
+  setPhpVersion(phpVersion) {
+    return this.#generator.setPhpVersion(phpVersion)
+  }
 
-    setDevelopmentCommons() {
-        return this.#generator.setDevelopmentCommons()
-    }
+  getPhpVersion() {
+    return this.#generator.getPhpVersion()
+  }
+
+  setDevelopmentCommons() {
+    return this.#generator.setDevelopmentCommons()
+  }
 }
