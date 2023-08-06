@@ -155,7 +155,7 @@ services:
     network_mode: host
 `
 
-expect(relationalDbContent.generate()).toEqual(expectContent)
+    expect(relationalDbContent.generate()).toEqual(expectContent)
 
   })
 })

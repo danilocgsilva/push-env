@@ -1,4 +1,5 @@
 import path from 'path';
+import ConfigureFileWritterException from "../Exceptions/ConfigureFileWritterException.js"
 
 export default function configureFileWritter(
   fileWriter,
@@ -6,7 +7,7 @@ export default function configureFileWritter(
   dockerComposeYmlGenerator
 ) {
   if (baseDir == "") {
-    throw new Error("Base directory has not been given!")
+    throw new ConfigureFileWritterException("Base directory has not been given!")
   }
   
   fileWriter.fileContent = dockerComposeYmlGenerator.generate();

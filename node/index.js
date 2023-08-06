@@ -20,6 +20,22 @@ if (!environmentAskedName) {
   process.exit(0)
 }
 
+const processFileWritting = async (noticeChanges, configurations, filePath, fileWriter) => {
+  if (noticeChanges.container_name) {
+    configurations.baseDir = `${configurations.baseDir}-${noticeChanges.container_name}`
+  }
+  filePath = configureFileWritter(
+    fileWriter,
+    configurations.baseDir,
+    configurations.dockerComposeYmlGenerator
+  )
+  await fileWriter.write();
+  console.log(
+    `Great! A docker-compose.yml file has been generated. Check the file ${filePath}`
+  );
+}
+
+let filePath
 try {
   const fileWriter = new FileWritter();
   const additionalConfsFromCommandLice = process.argv.slice(3)
@@ -32,19 +48,13 @@ try {
     queriedEnvironment: environmentAskedName
   }
   const noticeChanges = configureFromParameters(configurations, additionalConfsFromCommandLice)
-  if (noticeChanges.container_name) {
-    configurations.baseDir = `${configurations.baseDir}-${noticeChanges.container_name}`
+  
+  if (!noticeChanges.help) {
+    processFileWritting(noticeChanges, configurations, filePath, fileWriter)
+  } else {
+    console.log(configurations.dockerComposeYmlGenerator.help())
   }
 
-  const filePath = configureFileWritter(
-    fileWriter,
-    configurations.baseDir,
-    configurations.dockerComposeYmlGenerator
-  )
-  await fileWriter.write();
-  console.log(
-    `Great! A docker-compose.yml file has been generated. Check the file ${filePath}`
-  );
 } catch (e) {
   if (e instanceof GeneratorNotImplementedException) {
     const message = "Error. Ever you provided a not existing environment? Check out the allowed ones:"

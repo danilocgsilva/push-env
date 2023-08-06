@@ -85,7 +85,6 @@ describe('configureFromParameters', () => {
   })
 
   test('Must throws Error if tries to set php version from NodeContent', () => {
-
     const t = () => {
       const configurations = {
         baseDir: "",
