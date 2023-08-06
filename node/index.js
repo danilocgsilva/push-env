@@ -3,39 +3,44 @@ import configureFileWritter from "./Includes/configureFileWritter.js";
 import EnvironmentTypes from "./Includes/EnvironmentTypes.js";
 import configureFromParameters from "./Includes/configureFromParameters.js"
 import { FileWritter } from "./Includes/FileWritter.js";
-import MissingQueryException from "./Exceptions/MissingQueryException.js";
 import GeneratorNotImplementedException from "./Exceptions/GeneratorNotImplementedException.js";
 import { homedir } from 'os'
 import path from 'path';
 import ShallNotReplaceFile from "./Exceptions/ShallNotReplaceFile.js";
+import list_environments from "./list_environments_back.js";
 
 const environmentAskedName = process.argv[2];
 if (!environmentAskedName) {
-  throw new MissingQueryException();
-}
 
-const fileWriter = new FileWritter();
-const additionalConfsFromCommandLice = process.argv.slice(3)
-const configurations = {
-  baseDir: path.resolve(homedir(), "docker-environments", environmentAskedName),
-  dockerComposeYmlGenerator: new DockerComposeYmlGenerator(
-    environmentAskedName,
-    new EnvironmentTypes()
-  ),
-  queriedEnvironment: environmentAskedName
+  console.log("You have provided no environment in the command line. Check the available ones and also some options: \n")
+  
+  console.log(
+    list_environments()
+  )
+  process.exit(0)
 }
-const noticeChanges = configureFromParameters(configurations, additionalConfsFromCommandLice)
-if (noticeChanges.container_name) {
-  configurations.baseDir = `${configurations.baseDir}-${noticeChanges.container_name}`
-}
-
-const filePath = configureFileWritter(
-  fileWriter,
-  configurations.baseDir,
-  configurations.dockerComposeYmlGenerator
-)
 
 try {
+  const fileWriter = new FileWritter();
+  const additionalConfsFromCommandLice = process.argv.slice(3)
+  const configurations = {
+    baseDir: path.resolve(homedir(), "docker-environments", environmentAskedName),
+    dockerComposeYmlGenerator: new DockerComposeYmlGenerator(
+      environmentAskedName,
+      new EnvironmentTypes()
+    ),
+    queriedEnvironment: environmentAskedName
+  }
+  const noticeChanges = configureFromParameters(configurations, additionalConfsFromCommandLice)
+  if (noticeChanges.container_name) {
+    configurations.baseDir = `${configurations.baseDir}-${noticeChanges.container_name}`
+  }
+
+  const filePath = configureFileWritter(
+    fileWriter,
+    configurations.baseDir,
+    configurations.dockerComposeYmlGenerator
+  )
   await fileWriter.write();
   console.log(
     `Great! A docker-compose.yml file has been generated. Check the file ${filePath}`
@@ -47,6 +52,7 @@ try {
 
     const environmentTypes = new EnvironmentTypes();
     environmentTypes.listTypes();
+    console.log("pass")
   } else if (e instanceof ShallNotReplaceFile) {
     const message = `A folder called ${filePath} already exists. Doing nothing.`
     console.log(message)

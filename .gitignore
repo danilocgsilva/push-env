@@ -1,2 +1,4 @@
 node/node_modules/
 node/package-lock.json
+generate
+generate.exe

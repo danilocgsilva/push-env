@@ -1,21 +1,3 @@
-import EnvironmentTypes from "./Includes/EnvironmentTypes.js"
+import list_environments from "./list_environments_back.js";
 
-const environmentTypes = new EnvironmentTypes()
-console.log(environmentTypes.listTypes())
-
-const message = `Some options also is allowed:
-
-* hostport
-* container_name
-* base_path
-* set_external
-* network_mode
-* php_version
-* dev (only for php_apache, and shoud receive yes or true)
-
-For any of the available options, you can use its just as follows in the command line: hostport:<value>
-
-For example, you can type: ./generate <your_environment> hostport:<your_host_port> container_name:<your_container_name>
-`
-
-console.log(message)
+console.log(list_environments())
