@@ -87,5 +87,13 @@ CMD ["-D", "FOREGROUND"]
 
   setPhpVersion(phpVersion) {
     this.#phpVersion = phpVersion
+  } 
+
+  help() {
+    return `The php_apache type of auto generation can receive some special arguments:
+
+* php_version: Tested with 8.1, but other versions may works as well.
+* dev: may receive yes or true. This will create a receipt with includes common development packages for the environment, as zip, git, vim and xdebug.
+`
   }
 }

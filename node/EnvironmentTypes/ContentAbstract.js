@@ -63,6 +63,6 @@ export default class ContentAbstract {
   }
 
   help() {
-    return "Not implemented yet."
+    return "Help not implemented yet. Sorry!"
   }
 }
