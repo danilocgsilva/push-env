@@ -62,7 +62,7 @@ export default class PhpApacheContent extends ContentAbstract {
   }
 
   getDockerfileContent() {
-    const dockerfileContent = `FROM php:8.2-apache-bullseye
+    const dockerfileContent = `FROM php:${this.#phpVersion}-apache-bullseye
 
 RUN apt-get update
 RUN apt-get install vim zip git -y

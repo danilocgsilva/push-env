@@ -121,10 +121,11 @@ CMD ["-D", "FOREGROUND"]
     )
   })
 
-
   test('Php Apache Composer with development packages - docker-compose.yml', () => {
     const phpApacheContent = new PhpApacheContent()
     phpApacheContent.setDevelopmentCommons()
+    phpApacheContent.setPhpVersion("8.1")
+    
     const expectContent = `version: "3.5"
 
 services:
@@ -141,6 +142,36 @@ services:
     const generatedContent = phpApacheContent.generate()
 
     expect(generatedContent).toEqual(expectContent)
+  })
+
+  test('Php Apache Composer with development packages - Dockerfile', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setDevelopmentCommons()
+    phpApacheContent.setPhpVersion("8.1")
+
+    const expectedContent = `FROM php:8.1-apache-bullseye
+
+RUN apt-get update
+RUN apt-get install vim zip git -y
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug && docker-php-ext-enable xdebug && \
+  echo "" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+  echo "xdebug.mode = debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+  echo "xdebug.start_with_request = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN mkdir ./app
+WORKDIR /app
+EXPOSE 80
+ENTRYPOINT [ "/usr/sbin/apachectl" ]
+CMD ["-D", "FOREGROUND"]
+`
+
+    const objectContentResult = phpApacheContent.getDockerfileContent()
+
+    expect(
+      objectContentResult
+    ).toEqual(
+      expectedContent
+    )
   })
 
 })
