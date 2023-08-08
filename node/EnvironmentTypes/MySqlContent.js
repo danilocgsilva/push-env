@@ -1,6 +1,6 @@
 import ContentAbstract from "./ContentAbstract.js";
 
-export default class RelationalDbContent extends ContentAbstract {
+export default class MySqlContent extends ContentAbstract {
 
   constructor() {
     super()
@@ -20,7 +20,7 @@ export default class RelationalDbContent extends ContentAbstract {
     const containerName = this.getContainerName() == "" ? "database1" : this.getContainerName()
 
     const serviceBody = {
-      image: "mariadb:10.7"
+      image: "mysql:8.0.34"
     }
 
     if (this.getNetworkMode() == "") {

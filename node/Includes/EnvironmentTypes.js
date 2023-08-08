@@ -9,21 +9,23 @@ import PythonContent from "../EnvironmentTypes/PythonContent.js";
 import DebianContent from "../EnvironmentTypes/DebianContent.js";
 import UbuntuContent from "../EnvironmentTypes/UbuntuContent.js";
 import PHPContent from "../EnvironmentTypes/PHPContent.js";
+import MySqlContent from "../EnvironmentTypes/MySqlContent.js";
 
 export default class EnvironmentTypes {
   #types = null;
   constructor() {
     this.#types = {
       debian: new DebianContent(),
-      node: new NodeContent(),
-      relationaldb: new RelationalDb(),
       mongo: new MongoContent(),
+      mysql: new MySqlContent(),
+      node: new NodeContent(),
+      node_20_debian: new Node20DebianContent(),
+      node_debian: new NodeDebianContent(),
       php_apache: new PhpApacheContent(),
       php_apache_composer: new PhpApacheWithComposerContent(),
       php: new PHPContent(),
-      node_debian: new NodeDebianContent(),
-      node_20_debian: new Node20DebianContent(),
       python: new PythonContent(),
+      relationaldb: new RelationalDb(),
       ubuntu: new UbuntuContent()
     };
   }
