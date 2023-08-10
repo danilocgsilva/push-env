@@ -1,8 +1,12 @@
 import ContentAbstract from "./ContentAbstract.js";
 
 export default class DebianContent extends ContentAbstract {
+
+  #defaultTargetPort
+  
   constructor() {
     super()
+    this.#defaultTargetPort = null
   }
 
   generate() {
@@ -13,6 +17,12 @@ export default class DebianContent extends ContentAbstract {
       build: {
         context: "."
       }
+    }
+
+    if (this.#defaultTargetPort) {
+      serviceBody["ports"] = [
+        `${this.#defaultTargetPort}:80`
+      ]
     }
 
     const dockerComposeData = {
@@ -33,5 +43,9 @@ export default class DebianContent extends ContentAbstract {
 CMD while : ; do sleep 1000; done`;
 
     return dockerfileContent;
+  }
+
+  setHostPort(port) {
+    this.#defaultTargetPort = port
   }
 }

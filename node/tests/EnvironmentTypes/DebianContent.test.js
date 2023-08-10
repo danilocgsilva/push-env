@@ -14,7 +14,6 @@ services:
     build:
       context: .
 `
-
     expect(debianContent.generate()).toEqual(expectContent)
   })
 
@@ -31,7 +30,24 @@ services:
     build:
       context: .
 `
+    expect(debianContent.generate()).toEqual(expectContent)
+  })
 
+  test('Change Container name', () => {
+
+    const debianContent = new DebianContent()
+    debianContent.setHostPort("84")
+
+    const expectContent = `version: "3.5"
+
+services:
+  debian:
+    container_name: debian
+    build:
+      context: .
+    ports:
+      - 84:80
+`
     expect(debianContent.generate()).toEqual(expectContent)
   })
 
