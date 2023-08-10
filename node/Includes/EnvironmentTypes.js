@@ -10,11 +10,13 @@ import DebianContent from "../EnvironmentTypes/DebianContent.js";
 import UbuntuContent from "../EnvironmentTypes/UbuntuContent.js";
 import PHPContent from "../EnvironmentTypes/PHPContent.js";
 import MySqlContent from "../EnvironmentTypes/MySqlContent.js";
+import ApacheContent from "../EnvironmentTypes/ApacheContent.js";
 
 export default class EnvironmentTypes {
   #types = null;
   constructor() {
     this.#types = {
+      apache: new ApacheContent(),
       debian: new DebianContent(),
       mongo: new MongoContent(),
       mysql: new MySqlContent(),
