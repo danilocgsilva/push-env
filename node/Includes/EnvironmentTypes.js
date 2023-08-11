@@ -11,6 +11,7 @@ import UbuntuContent from "../EnvironmentTypes/UbuntuContent.js";
 import PHPContent from "../EnvironmentTypes/PHPContent.js";
 import MySqlContent from "../EnvironmentTypes/MySqlContent.js";
 import ApacheContent from "../EnvironmentTypes/ApacheContent.js";
+import DotNetCoreContent from "../EnvironmentTypes/DotNetCoreContent.js";
 
 export default class EnvironmentTypes {
   #types = null;
@@ -18,6 +19,7 @@ export default class EnvironmentTypes {
     this.#types = {
       apache: new ApacheContent(),
       debian: new DebianContent(),
+      dotnetcore: new DotNetCoreContent(),
       mongo: new MongoContent(),
       mysql: new MySqlContent(),
       node: new NodeContent(),
