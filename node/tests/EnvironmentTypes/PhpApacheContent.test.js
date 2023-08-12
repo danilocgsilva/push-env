@@ -100,11 +100,6 @@ services:
 
 RUN apt-get update
 RUN apt-get install vim zip git -y
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-RUN pecl install xdebug && docker-php-ext-enable xdebug && \
-  echo "" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-  echo "xdebug.mode = debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-  echo "xdebug.start_with_request = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN mkdir ./app
 WORKDIR /app
 EXPOSE 80
@@ -153,11 +148,6 @@ services:
 
 RUN apt-get update
 RUN apt-get install vim zip git -y
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-RUN pecl install xdebug && docker-php-ext-enable xdebug && \
-  echo "" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-  echo "xdebug.mode = debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-  echo "xdebug.start_with_request = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN mkdir ./app
 WORKDIR /app
 EXPOSE 80
