@@ -48,4 +48,17 @@ CMD while : ; do sleep 1000; done`;
   setHostPort(port) {
     this.#defaultTargetPort = port
   }
+
+  help() {
+    const message = `Creates an environment based on Debian Bullseye.
+
+An argumento for host is acceptable for debian_conte:
+
+* hostport
+
+Use hostport:<your_host_port> in the command line. It is the host port that will be redirected to the port 80 from the container, the expected port for an web application.
+`
+
+    return message
+  }
 }

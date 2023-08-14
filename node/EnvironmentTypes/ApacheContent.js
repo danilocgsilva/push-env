@@ -40,4 +40,15 @@ export default class DebianContent extends ContentAbstract {
   setHostPort(port) {
     this.#defaultTargetPort = port
   }
+
+  help() {
+    return `Creates a basic Apache webserver.
+  
+You can use the following argument:
+
+* hostport
+
+Add in the command line -> hostport:<your_port> <- .In this way, you redirects a different host port (other than 80) to the port 80 from your container, which is the default port to responds http requests for an web server.
+`
+  }
 }

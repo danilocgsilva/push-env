@@ -6,7 +6,6 @@ const list_environments = _ => {
     
     message += `\nSome common options also is allowed:
 
-* hostport
 * container_name
 * base_path
 * set_external
