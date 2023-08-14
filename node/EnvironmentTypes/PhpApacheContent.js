@@ -44,7 +44,7 @@ export default class PhpApacheContent extends ContentAbstract {
       serviceBody.build = {context: "."}
     }
 
-    serviceBody.ports = ["80:80"]
+    serviceBody.ports = [`${this.#hostPort}:80`]
     serviceBody.volumes = ["./app:/var/www/html"]
     serviceBody.working_dir = "/var/www/html"
     serviceBody.container_name = this.getContainerName()

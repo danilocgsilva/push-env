@@ -3,6 +3,7 @@ import MongoContent from "../EnvironmentTypes/MongoContent.js";
 import NodeContent from "../EnvironmentTypes/NodeContent.js";
 import PhpApacheContent from "../EnvironmentTypes/PhpApacheContent.js";
 import NodeDebianContent from "../EnvironmentTypes/NodeDebianContent.js";
+import NginxPhpFpmContent from "../EnvironmentTypes/NginxPhpFpmContent.js";
 import Node20DebianContent from "../EnvironmentTypes/Node20DebianContent.js";
 import PythonContent from "../EnvironmentTypes/PythonContent.js";
 import DebianContent from "../EnvironmentTypes/DebianContent.js";
@@ -22,6 +23,7 @@ export default class EnvironmentTypes {
       mongo: new MongoContent(),
       mysql: new MySqlContent(),
       node: new NodeContent(),
+      nginx_php_fpm: new NginxPhpFpmContent(),
       node_20_debian: new Node20DebianContent(),
       node_debian: new NodeDebianContent(),
       php_apache: new PhpApacheContent(),

@@ -164,4 +164,26 @@ CMD ["-D", "FOREGROUND"]
     )
   })
 
+  test('Php Apache Composer changing port for object', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setHostPort("88")
+    
+    const expectContent = `version: "3.5"
+
+services:
+  php-apache:
+    image: php:8.2-apache-bullseye
+    ports:
+      - 88:80
+    volumes:
+      - ./app:/var/www/html
+    working_dir: /var/www/html
+    container_name: php-apache
+`
+    const generatedContent = phpApacheContent.generate()
+
+    expect(generatedContent).toEqual(expectContent)
+  })
+
+
 })
