@@ -46,6 +46,10 @@ export default class ContentAbstract {
     return dockerComposeYml
   }
 
+  mayWriteConfigurationFile() {
+    return false
+  }
+
   setHostPort() {
     throw new NotFromCurrentContentClass("This method is not designed to work with this class.")
   }

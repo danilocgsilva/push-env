@@ -38,8 +38,36 @@ export default class NginxPhpFpmContent extends ContentAbstract {
     this.#defaultTargetPort = port
   }
 
-  writeConfigurationFiles() {
-    
+  mayWriteConfigurationFile() {
+    return true
+  }
+
+  getConfigurationsContent() {
+    return `server {
+    server_name localhost;
+    root /var/www/html/public;
+
+    location = / {
+        try_files @site @site;
+    }
+
+    location / {
+        try_files $uri $uri/ @site;
+    }
+
+    location ~ \.php$ {
+        return 404;
+    }
+
+    location @site {
+        fastcgi_pass nginx_php_fpm_dyn:9000;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME $document_root/index.php;
+    }
+
+    error_log /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+}`
   }
 
   _generatePhpReceipt(phpContainerName) {

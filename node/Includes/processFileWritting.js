@@ -1,15 +1,15 @@
 import configureFileWritter from "./configureFileWritter.js";
 
-const processFileWritting = async (noticeChanges, configurations, filePath, fileWriter) => {
+const processFileWritting = async (noticeChanges, configurations, filePath, dockerFileWritter) => {
   if (noticeChanges.container_name) {
     configurations.baseDir = `${configurations.baseDir}-${noticeChanges.container_name}`
   }
   filePath = configureFileWritter(
-    fileWriter,
+    dockerFileWritter,
     configurations.baseDir,
     configurations.dockerComposeYmlGenerator
   )
-  await fileWriter.write();
+  await dockerFileWritter.write();
   console.log(
     `Great! A docker-compose.yml file has been generated. Check the file ${filePath}`
   );

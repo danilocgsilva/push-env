@@ -54,4 +54,12 @@ export default class DockerComposeYmlGenerator {
   setDevelopmentCommons() {
     return this.#generator.setDevelopmentCommons()
   }
+
+  mayWriteConfigurationFile() {
+    return this.#generator.mayWriteConfigurationFile()
+  }
+
+  getGenerator() {
+    return this.#generator
+  }
 }

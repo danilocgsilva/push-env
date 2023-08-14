@@ -8,6 +8,7 @@ export class DockerFileWritter {
   #directoryPath = null
   #dockerfilePath = null
   #dockerfileContent = ""
+  #additionalFilesToWrite = []
 
   set filePath(filePath) {
     this.#filePath = filePath
@@ -29,12 +30,17 @@ export class DockerFileWritter {
     if (this.#dockerfileContent != "") {
       await this.writeDockerFile();
     }
+    await this._writeConfigurationsFiles()
   }
 
   writeFolders() {
     if (!fs.existsSync(this.#directoryPath)) {
       fs.mkdirSync(this.#directoryPath, { recursive: true });
     }
+  }
+
+  setAdditionalFileToWrite(fileToCreate) {
+    this.#additionalFilesToWrite.push(fileToCreate)
   }
 
   async writeDockerFile() {
@@ -46,15 +52,24 @@ export class DockerFileWritter {
   }
 
   async writeDockerComposeYmlFile() {
-
     if (fs.existsSync(this.#filePath)) {
       throw new ShallNotReplaceFile()
     }
-    
+
     await fs.writeFile(this.#filePath, this.#fileContent, (err) => {
       if (err) {
         console.error(err);
       }
     });
+  }
+
+  async _writeConfigurationsFiles() {
+    for (const element of this.#additionalFilesToWrite) {
+      await fs.writeFile(element.path, element.content, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
   }
 }

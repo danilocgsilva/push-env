@@ -2,7 +2,7 @@ import path from 'path';
 import ConfigureFileWritterException from "../Exceptions/ConfigureFileWritterException.js"
 
 export default function configureFileWritter(
-  fileWriter,
+  dockerFileWritter,
   baseDir,
   dockerComposeYmlGenerator
 ) {
@@ -10,13 +10,21 @@ export default function configureFileWritter(
     throw new ConfigureFileWritterException("Base directory has not been given!")
   }
   
-  fileWriter.fileContent = dockerComposeYmlGenerator.generate();
+  dockerFileWritter.fileContent = dockerComposeYmlGenerator.generate();
 
   const filePath = path.resolve(baseDir, "./docker-compose.yml");
-  fileWriter.filePath = filePath;
+  dockerFileWritter.filePath = filePath;
   const dockerFileContent = dockerComposeYmlGenerator.getDockerfileContent()
   if (dockerFileContent != "") {
-    fileWriter.dockerfileContent = dockerFileContent
+    dockerFileWritter.dockerfileContent = dockerFileContent
+  }
+  if (dockerComposeYmlGenerator.mayWriteConfigurationFile()) {
+    const generator = dockerComposeYmlGenerator.getGenerator()
+    const fileToCreate = {
+      content: generator.getConfigurationsContent(),
+      path: path.resolve(baseDir, "configs", "serverblock.conf")
+    }
+    dockerFileWritter.setAdditionalFileToWrite(fileToCreate)
   }
 
   return filePath
