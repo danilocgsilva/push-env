@@ -38,6 +38,10 @@ export default class NginxPhpFpmContent extends ContentAbstract {
     this.#defaultTargetPort = port
   }
 
+  writeConfigurationFiles() {
+    
+  }
+
   _generatePhpReceipt(phpContainerName) {
     const phpReceipt = {
       container_name: phpContainerName,

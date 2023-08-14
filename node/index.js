@@ -1,13 +1,13 @@
 import DockerComposeYmlGenerator from "./Includes/DockerComposeYmlGenerator.js";
-import configureFileWritter from "./Includes/configureFileWritter.js";
 import EnvironmentTypes from "./Includes/EnvironmentTypes.js";
 import configureFromParameters from "./Includes/configureFromParameters.js"
-import { FileWritter } from "./Includes/FileWritter.js";
+import { DockerFileWritter } from "./Includes/DockerFileWritter.js";
 import GeneratorNotImplementedException from "./Exceptions/GeneratorNotImplementedException.js";
 import { homedir } from 'os'
 import path from 'path';
 import ShallNotReplaceFile from "./Exceptions/ShallNotReplaceFile.js";
 import list_environments from "./list_environments_back.js";
+import processFileWritting from "./Includes/processFileWritting.js";
 
 const environmentAskedName = process.argv[2];
 if (!environmentAskedName) {
@@ -20,24 +20,9 @@ if (!environmentAskedName) {
   process.exit(0)
 }
 
-const processFileWritting = async (noticeChanges, configurations, filePath, fileWriter) => {
-  if (noticeChanges.container_name) {
-    configurations.baseDir = `${configurations.baseDir}-${noticeChanges.container_name}`
-  }
-  filePath = configureFileWritter(
-    fileWriter,
-    configurations.baseDir,
-    configurations.dockerComposeYmlGenerator
-  )
-  await fileWriter.write();
-  console.log(
-    `Great! A docker-compose.yml file has been generated. Check the file ${filePath}`
-  );
-}
-
 let filePath
 try {
-  const fileWriter = new FileWritter();
+  const dockerFileWritter = new DockerFileWritter();
   const additionalConfsFromCommandLice = process.argv.slice(3)
   const configurations = {
     baseDir: path.resolve(homedir(), "docker-environments", environmentAskedName),
@@ -52,7 +37,7 @@ try {
   if (noticeChanges.help) {
     console.log(configurations.dockerComposeYmlGenerator.help())
   } else {
-    processFileWritting(noticeChanges, configurations, filePath, fileWriter)
+    processFileWritting(noticeChanges, configurations, filePath, dockerFileWritter)
   }
 
 } catch (e) {

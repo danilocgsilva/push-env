@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import ShallNotReplaceFile from "../Exceptions/ShallNotReplaceFile.js"
 
-export class FileWritter {
+export class DockerFileWritter {
   #filePath = null
   #fileContent = null
   #directoryPath = null
