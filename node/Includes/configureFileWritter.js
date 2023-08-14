@@ -13,6 +13,7 @@ export default function configureFileWritter(
   dockerFileWritter.fileContent = dockerComposeYmlGenerator.generate();
 
   const filePath = path.resolve(baseDir, "./docker-compose.yml");
+  dockerFileWritter.dockerFileName = dockerComposeYmlGenerator.getDockerFileName();
   dockerFileWritter.filePath = filePath;
   const dockerFileContent = dockerComposeYmlGenerator.getDockerfileContent()
   if (dockerFileContent != "") {
@@ -25,6 +26,10 @@ export default function configureFileWritter(
       path: path.resolve(baseDir, "configs", "serverblock.conf")
     }
     dockerFileWritter.setAdditionalFileToWrite(fileToCreate)
+
+    const fileToCreateDockerfilePhp = generator.getAdditionalFilesWithPathsAndContents()[0]
+    fileToCreateDockerfilePhp.path = path.resolve(baseDir, fileToCreateDockerfilePhp.path)
+    dockerFileWritter.setAdditionalFileToWrite(fileToCreateDockerfilePhp)
   }
 
   return filePath

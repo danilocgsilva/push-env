@@ -73,4 +73,12 @@ export default class ContentAbstract {
   help() {
     return "Help not implemented yet. Sorry!"
   }
+
+  getDockerFileName() {
+    return "Dockerfile"
+  }
+
+  getAdditionalFilesWithPathsAndContents() {
+    return []
+  }
 }

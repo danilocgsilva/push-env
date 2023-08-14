@@ -9,15 +9,24 @@ export class DockerFileWritter {
   #dockerfilePath = null
   #dockerfileContent = ""
   #additionalFilesToWrite = []
+  #dockerFileName = ""
+
+  set dockerFileName(dockerFileName) {
+    this.#dockerFileName = dockerFileName
+  }
 
   set filePath(filePath) {
     this.#filePath = filePath
     this.#directoryPath = path.dirname(this.#filePath)
-    this.#dockerfilePath = path.resolve(this.#directoryPath, "Dockerfile")
+    this.#dockerfilePath = path.resolve(this.#directoryPath, this.#dockerFileName)
   }
 
   set fileContent(fileContent) {
     this.#fileContent = fileContent;
+  }
+
+  get fileContent() {
+    return this.#fileContent
   }
 
   set dockerfileContent(dockerFileContent) {
@@ -65,6 +74,12 @@ export class DockerFileWritter {
 
   async _writeConfigurationsFiles() {
     for (const element of this.#additionalFilesToWrite) {
+      const directoryPath = path.dirname(element.path)
+
+      if (!fs.existsSync(directoryPath)) {
+        fs.mkdirSync(directoryPath, { recursive: true });
+      }
+      
       await fs.writeFile(element.path, element.content, (err) => {
         if (err) {
           console.error(err);

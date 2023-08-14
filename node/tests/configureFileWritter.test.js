@@ -8,7 +8,7 @@ describe('configureFileWritter', _ => {
 
   test('Basic configureFileWritter', () => {
 
-    const fileWriter = new DockerFileWritter();
+    const dockerFileWritter = new DockerFileWritter();
     const baseDir = ''
     const dockerComposeYmlGenerator = new DockerComposeYmlGenerator(
       "php",
@@ -17,7 +17,7 @@ describe('configureFileWritter', _ => {
 
     const t = () => {
       configureFileWritter(
-        fileWriter,
+        dockerFileWritter,
         baseDir,
         dockerComposeYmlGenerator)
     };

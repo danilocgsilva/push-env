@@ -1,27 +1,35 @@
 import ContentAbstract from "./ContentAbstract.js";
 
-export default class NginxPhpFpmContent extends ContentAbstract {
+export default class PhpfpmNginxContent extends ContentAbstract {
 
   #defaultTargetPort
+  #phpContainerName = "nginx_php_fpm_dyn"
 
   constructor() {
     super()
     this.#defaultTargetPort = "80"
   }
 
-  generate() {
+  setContainerName(containerName) {
+    this._containerName = containerName
+    this.#phpContainerName = this.getContainerName() == "" ? "nginx_php_fpm_dyn" : this.getContainerName() + "_php"
+  }
 
+  getPhpContainerName() {
+    return this.#phpContainerName
+  }
+
+  generate() {
     const dockerComposeData = {
       version: "3.5",
       services: {}
     }
 
-    const phpContainerName = this.getContainerName() == "" ? "nginx_php_fpm_dyn" : this.getContainerName() + "_php"
     const webserverContainerName = this.getContainerName() == "" ? "nginx_php_fpm_webserver" : `${this.getContainerName()}_webserver`
 
-    dockerComposeData.services[phpContainerName] = this._generatePhpReceipt(phpContainerName)
+    dockerComposeData.services[this.#phpContainerName] = this._generatePhpReceipt(this.#phpContainerName)
     dockerComposeData.services[webserverContainerName] = this._generateWebserverReceipt(
-      phpContainerName, 
+      this.#phpContainerName, 
       webserverContainerName
     )
 
@@ -31,7 +39,10 @@ export default class NginxPhpFpmContent extends ContentAbstract {
   }
 
   getDockerfileContent() {
-    return "FROM nginx:latest\n";
+    return `FROM nginx:latest
+
+COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
+`;
   }
 
   setHostPort(port) {
@@ -45,7 +56,7 @@ export default class NginxPhpFpmContent extends ContentAbstract {
   getConfigurationsContent() {
     return `server {
     server_name localhost;
-    root /var/www/html/public;
+    root /var/www/html;
 
     location = / {
         try_files @site @site;
@@ -60,7 +71,7 @@ export default class NginxPhpFpmContent extends ContentAbstract {
     }
 
     location @site {
-        fastcgi_pass nginx_php_fpm_dyn:9000;
+        fastcgi_pass ${this.#phpContainerName}:9000;
         include fastcgi_params;
         fastcgi_param  SCRIPT_FILENAME $document_root/index.php;
     }
@@ -103,5 +114,24 @@ export default class NginxPhpFpmContent extends ContentAbstract {
         phpContainerName
       ]
     }
+  }
+
+  getDockerFileName() {
+    return "Dockerfilewebserve"
+  }
+
+  getAdditionalFilesWithPathsAndContents() {
+
+    const additionalFileContent = `FROM php:8.2.8-fpm
+
+EXPOSE 9000
+`
+
+    const additionalFile = {
+      content: additionalFileContent,
+      path: "Dockerfilephp"
+    }
+
+    return [additionalFile]
   }
 }

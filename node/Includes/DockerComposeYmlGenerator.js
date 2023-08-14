@@ -62,4 +62,12 @@ export default class DockerComposeYmlGenerator {
   getGenerator() {
     return this.#generator
   }
+
+  getDockerFileName() {
+    return this.#generator.getDockerFileName()
+  }
+
+  getAdditionalFilesWithPathsAndContents() {
+    return this.#generator.getAdditionalFilesWithPathsAndContents()
+  }
 }
