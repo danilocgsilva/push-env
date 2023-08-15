@@ -4,6 +4,7 @@ export default class PhpfpmNginxContent extends ContentAbstract {
 
   #defaultTargetPort
   #phpContainerName = "nginx_php_fpm_dyn"
+  #developmentContext = false
 
   constructor() {
     super()
@@ -47,6 +48,10 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
 
   setHostPort(port) {
     this.#defaultTargetPort = port
+  }
+
+  setDevelopmentCommons() {
+    this.#developmentContext = true
   }
 
   mayWriteConfigurationFile() {
@@ -122,10 +127,22 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
 
   getAdditionalFilesWithPathsAndContents() {
 
-    const additionalFileContent = `FROM php:8.2.8-fpm
+    const additionalFileContentHeader = "FROM php:8.2.8-fpm\n\n"
 
-EXPOSE 9000
+    const additionalFileContentFooter = "EXPOSE 9000\n"
+
+    let additionalFileContent
+
+    if (this.#developmentContext) {
+
+      const developmentContent = `RUN apt-get update && apt-get install vim curl wget zip -y
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
 `
+      additionalFileContent = additionalFileContentHeader + developmentContent + additionalFileContentFooter
+    } else {
+      additionalFileContent = additionalFileContentHeader + additionalFileContentFooter
+    }
 
     const additionalFile = {
       content: additionalFileContent,
@@ -133,5 +150,16 @@ EXPOSE 9000
     }
 
     return [additionalFile]
+  }
+
+  help() {
+    return `Generates a Docker recipe encompassing two containers: one to php-fpm and another to the Nginx server. Both reside in the same docker-compose.yml file.
+
+There is also a parameters that can be used:
+
+* dev:<affirmation>
+
+The <affirmation> can be only yes or true. This installs additional stuffs to the php-fpm recipe, so is better for a development porpouse. Vim, curl, zip, wget and composer packages are added to the environment.
+`
   }
 }

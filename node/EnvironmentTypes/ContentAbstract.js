@@ -70,6 +70,10 @@ export default class ContentAbstract {
     throw new NotFromCurrentContentClass("This method is not designed to work with this class.")
   }
 
+  setDevelopmentCommons() {
+    throw new NotFromCurrentContentClass("This method is not designed to work with this class.")
+  }
+
   help() {
     return "Help not implemented yet. Sorry!"
   }

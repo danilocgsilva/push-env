@@ -166,4 +166,35 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
     expect(nginxPhpFpmContent.getConfigurationsContent()).toEqual(expectedContent)
   })
 
+  test('Correct Dockerfilephp receipt', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+
+    const returnedContent = nginxPhpFpmContent.getAdditionalFilesWithPathsAndContents()
+
+    const expectedData = returnedContent[0].content
+
+    const expectedContent = `FROM php:8.2.8-fpm
+
+EXPOSE 9000
+`
+    expect(expectedData).toEqual(expectedContent)
+  })
+
+  test('Correct Dockerfilephp receipt if in development context', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setDevelopmentCommons()
+
+    const returnedContent = nginxPhpFpmContent.getAdditionalFilesWithPathsAndContents()
+
+    const expectedData = returnedContent[0].content
+
+    const expectedContent = `FROM php:8.2.8-fpm
+
+RUN apt-get update && apt-get install vim curl wget zip -y
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+EXPOSE 9000
+`
+    expect(expectedData).toEqual(expectedContent)
+  })
 })

@@ -97,5 +97,4 @@ describe('configureFromParameters', () => {
 
     expect(t).toThrow(NotFromCurrentContentClass);
   })
-
 })
