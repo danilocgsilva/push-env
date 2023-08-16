@@ -51,25 +51,11 @@ export default class PhpfpmNginxContent extends ContentAbstract {
     return dockerComposeYml
   }
 
-  _prepareSingleContainerMode() {
-    const containerName = this.getContainerName() == "" ? "nginx_php_fpm" : `${this.getContainerName()}_webserver`
-    this.#adapter = new SingleContainer()
-    this.#adapter.containerName = containerName
-  }
-
-  _prepareMultipleContainerMode() {
-    const webserverContainerName = this.getContainerName() == "" ? "nginx_php_fpm_webserver" : `${this.getContainerName()}_webserver`
-    this.#adapter = new MultipleContainers()
-    this.#adapter.webserverContainerName = webserverContainerName
-    this.forcePhpContainerName()
-    this.#adapter.phpContainerName = this.#phpContainerName
-  }
-
   getDockerfileContent() {
-    return `FROM nginx:latest
-
-COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
-`;
+    if (this.#adapter === null) {
+      this.#adapter = new MultipleContainers()
+    }
+    return this.#adapter.getDockerfileContent()
   }
 
   setHostPort(port) {
@@ -155,5 +141,19 @@ There is also a parameters that can be used:
 
 The <affirmation> can be only yes or true. This installs additional stuffs to the php-fpm recipe, so is better for a development porpouse. Vim, curl, zip, wget and composer packages are added to the environment.
 `
+  }
+
+  _prepareSingleContainerMode() {
+    const containerName = this.getContainerName() == "" ? "nginx_php_fpm" : `${this.getContainerName()}_webserver`
+    this.#adapter = new SingleContainer()
+    this.#adapter.containerName = containerName
+  }
+
+  _prepareMultipleContainerMode() {
+    const webserverContainerName = this.getContainerName() == "" ? "nginx_php_fpm_webserver" : `${this.getContainerName()}_webserver`
+    this.#adapter = new MultipleContainers()
+    this.#adapter.webserverContainerName = webserverContainerName
+    this.forcePhpContainerName()
+    this.#adapter.phpContainerName = this.#phpContainerName
   }
 }

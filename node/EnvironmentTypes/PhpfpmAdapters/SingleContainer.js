@@ -26,5 +26,19 @@ export default class SingleContainer {
       ]
     }
   }
+
+  getDockerfileContent() {
+    return `FROM debian:bookworm
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install vim git zip curl wget -y
+RUN apt-get install nginx -y
+RUN apt-get install php8.2-fpm -y
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+CMD [ "./entrypoint.sh" ]
+`
+  }
 }
 

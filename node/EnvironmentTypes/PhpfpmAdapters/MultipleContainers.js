@@ -26,6 +26,13 @@ export default class MultipleContainers {
     this.#dockerComposeData.services[this.#webserverContainerName] = this._generateWebserverReceipt()
   }
 
+  getDockerfileContent() {
+    return `FROM nginx:latest
+
+COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
+`
+  }
+
   _generatePhpReceipt() {
     const phpReceipt = {
       container_name: this.#phpContainerName,
