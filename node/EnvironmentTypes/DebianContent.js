@@ -38,7 +38,7 @@ export default class DebianContent extends ContentAbstract {
   }
 
   getDockerfileContent() {
-    const dockerfileContent = `FROM debian:bullseye
+    const dockerfileContent = `FROM debian:bookworm
 
 CMD while : ; do sleep 1000; done`;
 
@@ -50,7 +50,7 @@ CMD while : ; do sleep 1000; done`;
   }
 
   help() {
-    const message = `Creates an environment based on Debian Bullseye.
+    const message = `Creates an environment based on Debian Bookworm.
 
 An argumento for host is acceptable for debian_conte:
 

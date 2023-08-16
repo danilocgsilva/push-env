@@ -51,4 +51,14 @@ services:
     expect(debianContent.generate()).toEqual(expectContent)
   })
 
+  test('Test getDockerfileContent', () => {
+    const debianContent = new DebianContent()
+
+    const expectedContent = `FROM debian:bookworm
+
+CMD while : ; do sleep 1000; done`
+    
+    expect(debianContent.getDockerfileContent()).toEqual(expectedContent)
+  })
+
 })

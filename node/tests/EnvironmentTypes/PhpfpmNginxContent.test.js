@@ -195,6 +195,41 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 
 EXPOSE 9000
 `
-    expect(expectedData).toEqual(expectedContent)
+    expect(expectedContent).toEqual(expectedData)
   })
+
+  test('Single Container Mode Basic', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setSingleContainer()
+    const expectContent = `version: "3.5"
+
+services:
+  nginx_php_fpm:
+    container_name: nginx_php_fpm
+    build:
+      context: .
+    ports:
+      - 80:80
+`
+    expect(expectContent).toEqual(nginxPhpFpmContent.generate())
+  })
+
+  test('Single Container Mode getDockerfileContent', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setSingleContainer()
+    nginxPhpFpmContent.getDockerfileContent()
+    const expectContent = `FROM debian:bookworm
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install vim git zip curl wget -y
+RUN apt-get install nginx -y
+RUN apt-get install php8.2-fpm -y
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+CMD [ "./entrypoint.sh" ]
+`
+    expect(expectContent).toEqual(nginxPhpFpmContent.getDockerfileContent())
+  })
+
 })

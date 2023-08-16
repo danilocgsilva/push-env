@@ -1,18 +1,31 @@
 import ContentAbstract from "./ContentAbstract.js";
+import MultipleContainers from "./PhpfpmAdapters/MultipleContainers.js";
+import SingleContainer from "./PhpfpmAdapters/SingleContainer.js";
 
 export default class PhpfpmNginxContent extends ContentAbstract {
 
   #defaultTargetPort
-  #phpContainerName = "nginx_php_fpm_dyn"
+  #phpContainerName = ""
   #developmentContext = false
+  #singleContainer = false
+  #adapter = null
 
   constructor() {
     super()
     this.#defaultTargetPort = "80"
   }
 
+  setSingleContainer() {
+    this.#singleContainer = true;
+    this._prepareSingleContainerMode()
+  }
+
   setContainerName(containerName) {
     this._containerName = containerName
+    this.forcePhpContainerName()
+  }
+
+  forcePhpContainerName() {
     this.#phpContainerName = this.getContainerName() == "" ? "nginx_php_fpm_dyn" : this.getContainerName() + "_php"
   }
 
@@ -26,17 +39,30 @@ export default class PhpfpmNginxContent extends ContentAbstract {
       services: {}
     }
 
-    const webserverContainerName = this.getContainerName() == "" ? "nginx_php_fpm_webserver" : `${this.getContainerName()}_webserver`
+    if (!this.#singleContainer) {
+      this._prepareMultipleContainerMode()
+    }
 
-    dockerComposeData.services[this.#phpContainerName] = this._generatePhpReceipt(this.#phpContainerName)
-    dockerComposeData.services[webserverContainerName] = this._generateWebserverReceipt(
-      this.#phpContainerName, 
-      webserverContainerName
-    )
+    this.#adapter.defaultTargetPort = this.#defaultTargetPort
+    this.#adapter.dockerComposeData = dockerComposeData
+    this.#adapter.alterDockerComposeData()
 
     const dockerComposeYml = this.getContentFinalStringFromYml(dockerComposeData)
+    return dockerComposeYml
+  }
 
-    return dockerComposeYml;
+  _prepareSingleContainerMode() {
+    const containerName = this.getContainerName() == "" ? "nginx_php_fpm" : `${this.getContainerName()}_webserver`
+    this.#adapter = new SingleContainer()
+    this.#adapter.containerName = containerName
+  }
+
+  _prepareMultipleContainerMode() {
+    const webserverContainerName = this.getContainerName() == "" ? "nginx_php_fpm_webserver" : `${this.getContainerName()}_webserver`
+    this.#adapter = new MultipleContainers()
+    this.#adapter.webserverContainerName = webserverContainerName
+    this.forcePhpContainerName()
+    this.#adapter.phpContainerName = this.#phpContainerName
   }
 
   getDockerfileContent() {
@@ -59,6 +85,9 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
   }
 
   getConfigurationsContent() {
+
+    this.forcePhpContainerName()
+    
     return `server {
     server_name localhost;
     root /var/www/html;
@@ -84,41 +113,6 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
     error_log /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 }`
-  }
-
-  _generatePhpReceipt(phpContainerName) {
-    const phpReceipt = {
-      container_name: phpContainerName,
-      build: {
-        context: ".",
-        dockerfile: "Dockerfilephp"
-      }
-    }
-
-    phpReceipt["ports"] = [
-      "9000:9000"
-    ]
-    
-    return phpReceipt
-  }
-
-  _generateWebserverReceipt(
-    phpContainerName,
-    webserverContainerName
-  ) {
-    return {
-      container_name: webserverContainerName,
-      build: {
-        context: ".",
-        dockerfile: "Dockerfilewebserve",
-      },
-      ports: [
-        `${this.#defaultTargetPort}:80`
-      ],
-      links: [
-        phpContainerName
-      ]
-    }
   }
 
   getDockerFileName() {
