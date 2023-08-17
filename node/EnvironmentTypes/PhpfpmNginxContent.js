@@ -73,63 +73,29 @@ export default class PhpfpmNginxContent extends ContentAbstract {
   getConfigurationsContent() {
 
     this.forcePhpContainerName()
-    
-    return `server {
-    server_name localhost;
-    root /var/www/html;
 
-    location = / {
-        try_files @site @site;
+    if (this.#adapter === null) {
+      this.#adapter = new MultipleContainers()
+      this.#adapter.phpContainerName = this.#phpContainerName
     }
 
-    location / {
-        try_files $uri $uri/ @site;
-    }
-
-    location ~ \.php$ {
-        return 404;
-    }
-
-    location @site {
-        fastcgi_pass ${this.#phpContainerName}:9000;
-        include fastcgi_params;
-        fastcgi_param  SCRIPT_FILENAME $document_root/index.php;
-    }
-
-    error_log /var/log/nginx/error.log;
-    access_log /var/log/nginx/access.log;
-}`
+    return this.#adapter.getConfigurationsContent()
   }
 
   getDockerFileName() {
-    return "Dockerfilewebserve"
+    return this.#adapter.getDockerFileName()
   }
 
   getAdditionalFilesWithPathsAndContents() {
-
-    const additionalFileContentHeader = "FROM php:8.2.8-fpm\n\n"
-
-    const additionalFileContentFooter = "EXPOSE 9000\n"
-
-    let additionalFileContent
+    if (this.#adapter === null) {
+      this.#adapter = new MultipleContainers()
+    }
 
     if (this.#developmentContext) {
-
-      const developmentContent = `RUN apt-get update && apt-get install vim curl wget zip -y
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-
-`
-      additionalFileContent = additionalFileContentHeader + developmentContent + additionalFileContentFooter
-    } else {
-      additionalFileContent = additionalFileContentHeader + additionalFileContentFooter
+      this.#adapter.setDevelopmentCommons()
     }
 
-    const additionalFile = {
-      content: additionalFileContent,
-      path: "Dockerfilephp"
-    }
-
-    return [additionalFile]
+    return this.#adapter.getAdditionalFilesWithPathsAndContents()
   }
 
   help() {
@@ -151,6 +117,7 @@ The <affirmation> can be only yes or true. This installs additional stuffs to th
 
   _prepareMultipleContainerMode() {
     const webserverContainerName = this.getContainerName() == "" ? "nginx_php_fpm_webserver" : `${this.getContainerName()}_webserver`
+
     this.#adapter = new MultipleContainers()
     this.#adapter.webserverContainerName = webserverContainerName
     this.forcePhpContainerName()

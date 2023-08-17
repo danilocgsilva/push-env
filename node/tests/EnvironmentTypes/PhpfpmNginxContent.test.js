@@ -232,4 +232,22 @@ CMD [ "./entrypoint.sh" ]
     expect(expectContent).toEqual(nginxPhpFpmContent.getDockerfileContent())
   })
 
+  test('Single Container Mode additional file content', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setSingleContainer()
+
+    const additionalFileContent = nginxPhpFpmContent.getAdditionalFilesWithPathsAndContents()
+    const dynamicReturnedContent = additionalFileContent[0].content
+
+    const expectedContent = `#!/bin/bash
+
+/etc/init.d/nginx start
+/etc/init.d/php8.2-fpm start
+
+while : ; do sleep 1000; done
+`
+
+    expect(dynamicReturnedContent).toEqual(expectedContent)
+  })
+
 })

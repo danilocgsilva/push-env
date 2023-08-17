@@ -27,6 +27,37 @@ export default class SingleContainer {
     }
   }
 
+  getDockerFileName() {
+    return "Dockerfile"
+  }
+
+  getConfigurationsContent() {
+    return `server {
+      listen 80 default_server;
+      listen [::]:80 default_server;
+
+      root /var/www/html;
+
+      index index.html index.htm index.nginx-debian.html index.php;
+
+      server_name _;
+
+      location / {
+              try_files $uri $uri/ =404;
+      }
+
+      location ~ \.php$ {
+              include snippets/fastcgi-php.conf;
+              fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+      }
+
+      location ~ /\.ht {
+              deny all;
+      }
+}
+`
+  }
+
   getDockerfileContent() {
     return `FROM debian:bookworm
 
@@ -39,6 +70,23 @@ RUN chmod +x /entrypoint.sh
 
 CMD [ "./entrypoint.sh" ]
 `
+  }
+
+  getAdditionalFilesWithPathsAndContents() {
+
+    const fileContent = `#!/bin/bash
+
+/etc/init.d/nginx start
+/etc/init.d/php8.2-fpm start
+
+while : ; do sleep 1000; done
+`
+    const additionalContent = {
+      content: fileContent,
+      path: "entrypoint.sh"
+    }
+
+    return [additionalContent]
   }
 }
 
