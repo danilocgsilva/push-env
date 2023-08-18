@@ -88,7 +88,9 @@ export default class PhpfpmNginxContent extends ContentAbstract {
   }
 
   getAdditionalFilesWithPathsAndContents() {
-    this._setAdapter()
+    if (this.#adapter === null) {
+      this._setAdapter()
+    }
 
     if (this.#developmentContext) {
       this.#adapter.setDevelopmentCommons()

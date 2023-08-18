@@ -286,4 +286,22 @@ services:
     expect(nginxPhpFpmContent.generate()).toEqual(expectedContent)
   })
 
+  test('Using both generate for composer yml and the additional files', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setSingleContainer()
+    nginxPhpFpmContent.setContainerName("my_nginx_receipt_with_single_mode")
+    nginxPhpFpmContent.setHostPort("89")
+    nginxPhpFpmContent.generate()
+    const additionalContent = nginxPhpFpmContent.getAdditionalFilesWithPathsAndContents()
+    const expectedContent = `#!/bin/bash
+
+/etc/init.d/nginx start
+/etc/init.d/php8.2-fpm start
+
+while : ; do sleep 1000; done
+`
+
+    expect(additionalContent[0].content).toEqual(expectedContent)
+  })
+
 })
