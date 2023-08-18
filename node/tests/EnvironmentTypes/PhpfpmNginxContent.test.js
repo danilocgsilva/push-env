@@ -208,6 +208,8 @@ services:
     container_name: nginx_php_fpm
     build:
       context: .
+    volumes:
+      - ./app:/var/www/html
     ports:
       - 80:80
 `
@@ -262,6 +264,8 @@ services:
     container_name: my_nginx_receipt_with_single_mode
     build:
       context: .
+    volumes:
+      - ./app:/var/www/html
     ports:
       - 89:80
 `
@@ -280,6 +284,8 @@ services:
     container_name: my_nginx_receipt_with_single_mode
     build:
       context: .
+    volumes:
+      - ./app:/var/www/html
     ports:
       - 89:80
 `

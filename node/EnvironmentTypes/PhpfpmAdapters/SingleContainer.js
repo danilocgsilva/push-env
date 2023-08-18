@@ -21,6 +21,9 @@ export default class SingleContainer {
       build: {
         context: "."
       },
+      volumes: [
+        "./app:/var/www/html"
+      ],
       ports: [
         `${this.#defaultTargetPort}:80`
       ]
