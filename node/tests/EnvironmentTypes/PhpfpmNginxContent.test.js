@@ -221,10 +221,10 @@ services:
     const expectContent = `FROM debian:bookworm
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install vim git zip curl wget -y
 RUN apt-get install nginx -y
 RUN apt-get install php8.2-fpm -y
 COPY ./entrypoint.sh /entrypoint.sh
+COPY ./configs/serverblock.conf /etc/nginx/sites-available/default
 RUN chmod +x /entrypoint.sh
 
 CMD [ "./entrypoint.sh" ]
@@ -248,6 +248,42 @@ while : ; do sleep 1000; done
 `
 
     expect(dynamicReturnedContent).toEqual(expectedContent)
+  })
+
+  test('Single Container Mode several parameters setted and docker-compose text generated', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setContainerName("my_nginx_receipt_with_single_mode")
+    nginxPhpFpmContent.setSingleContainer()
+    nginxPhpFpmContent.setHostPort("89")
+    const expectedContent = `version: "3.5"
+
+services:
+  my_nginx_receipt_with_single_mode:
+    container_name: my_nginx_receipt_with_single_mode
+    build:
+      context: .
+    ports:
+      - 89:80
+`
+    expect(nginxPhpFpmContent.generate()).toEqual(expectedContent)
+  })
+
+  test('Single Container Mode several parameters setted and docker-compose text generated inverse order of call', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setSingleContainer()
+    nginxPhpFpmContent.setContainerName("my_nginx_receipt_with_single_mode")
+    nginxPhpFpmContent.setHostPort("89")
+    const expectedContent = `version: "3.5"
+
+services:
+  my_nginx_receipt_with_single_mode:
+    container_name: my_nginx_receipt_with_single_mode
+    build:
+      context: .
+    ports:
+      - 89:80
+`
+    expect(nginxPhpFpmContent.generate()).toEqual(expectedContent)
   })
 
 })

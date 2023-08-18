@@ -17,7 +17,6 @@ export default class PhpfpmNginxContent extends ContentAbstract {
 
   setSingleContainer() {
     this.#singleContainer = true;
-    this._prepareSingleContainerMode()
   }
 
   setContainerName(containerName) {
@@ -39,7 +38,9 @@ export default class PhpfpmNginxContent extends ContentAbstract {
       services: {}
     }
 
-    if (!this.#singleContainer) {
+    if (this.#singleContainer) {
+      this._prepareSingleContainerMode()
+    } else {
       this._prepareMultipleContainerMode()
     }
 
@@ -53,7 +54,7 @@ export default class PhpfpmNginxContent extends ContentAbstract {
 
   getDockerfileContent() {
     if (this.#adapter === null) {
-      this.#adapter = new MultipleContainers()
+      this._setAdapter()
     }
     return this.#adapter.getDockerfileContent()
   }
@@ -87,9 +88,7 @@ export default class PhpfpmNginxContent extends ContentAbstract {
   }
 
   getAdditionalFilesWithPathsAndContents() {
-    if (this.#adapter === null) {
-      this.#adapter = new MultipleContainers()
-    }
+    this._setAdapter()
 
     if (this.#developmentContext) {
       this.#adapter.setDevelopmentCommons()
@@ -110,7 +109,7 @@ The <affirmation> can be only yes or true. This installs additional stuffs to th
   }
 
   _prepareSingleContainerMode() {
-    const containerName = this.getContainerName() == "" ? "nginx_php_fpm" : `${this.getContainerName()}_webserver`
+    const containerName = this.getContainerName() == "" ? "nginx_php_fpm" : `${this.getContainerName()}`
     this.#adapter = new SingleContainer()
     this.#adapter.containerName = containerName
   }
@@ -122,5 +121,16 @@ The <affirmation> can be only yes or true. This installs additional stuffs to th
     this.#adapter.webserverContainerName = webserverContainerName
     this.forcePhpContainerName()
     this.#adapter.phpContainerName = this.#phpContainerName
+  }
+
+  _setAdapter() {
+    if (this.#adapter !== null) {
+      throw new Error("Adapter already is set.")
+    }
+    if (this.#singleContainer) {
+      this.#adapter = new SingleContainer()
+    } else {
+      this.#adapter = new MultipleContainers()
+    }
   }
 }

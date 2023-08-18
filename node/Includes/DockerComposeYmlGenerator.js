@@ -70,4 +70,8 @@ export default class DockerComposeYmlGenerator {
   getAdditionalFilesWithPathsAndContents() {
     return this.#generator.getAdditionalFilesWithPathsAndContents()
   }
+
+  setSingleContainer() {
+    this.#generator.setSingleContainer()
+  }
 }

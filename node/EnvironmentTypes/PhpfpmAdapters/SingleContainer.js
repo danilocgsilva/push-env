@@ -33,27 +33,27 @@ export default class SingleContainer {
 
   getConfigurationsContent() {
     return `server {
-      listen 80 default_server;
-      listen [::]:80 default_server;
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-      root /var/www/html;
+    root /var/www/html;
 
-      index index.html index.htm index.nginx-debian.html index.php;
+    index index.html index.htm index.nginx-debian.html index.php;
 
-      server_name _;
+    server_name _;
 
-      location / {
-              try_files $uri $uri/ =404;
-      }
+    location / {
+        try_files $uri $uri/ =404;
+    }
 
-      location ~ \.php$ {
-              include snippets/fastcgi-php.conf;
-              fastcgi_pass unix:/run/php/php8.2-fpm.sock;
-      }
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+    }
 
-      location ~ /\.ht {
-              deny all;
-      }
+    location ~ /\.ht {
+        deny all;
+    }
 }
 `
   }
@@ -62,10 +62,10 @@ export default class SingleContainer {
     return `FROM debian:bookworm
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install vim git zip curl wget -y
 RUN apt-get install nginx -y
 RUN apt-get install php8.2-fpm -y
 COPY ./entrypoint.sh /entrypoint.sh
+COPY ./configs/serverblock.conf /etc/nginx/sites-available/default
 RUN chmod +x /entrypoint.sh
 
 CMD [ "./entrypoint.sh" ]
