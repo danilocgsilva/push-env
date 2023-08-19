@@ -1,6 +1,14 @@
 import path from 'path';
 import ConfigureFileWritterException from "../Exceptions/ConfigureFileWritterException.js"
+import { DockerFileWritter } from './DockerFileWritter.js';
+import DockerComposeYmlGenerator from './DockerComposeYmlGenerator.js';
 
+/**
+ * @param {DockerFileWritter} dockerFileWritter 
+ * @param {string} baseDir 
+ * @param {DockerComposeYmlGenerator} dockerComposeYmlGenerator 
+ * @returns 
+ */
 export default function configureFileWritter(
   dockerFileWritter,
   baseDir,

@@ -34,6 +34,11 @@ export default class SingleContainer {
     return "Dockerfile"
   }
 
+  /**
+   * Returns the Nginx server block file content
+   * 
+   * @returns string
+   */
   getConfigurationsContent() {
     return `server {
     listen 80 default_server;

@@ -120,7 +120,7 @@ CMD ["-D", "FOREGROUND"]
     const phpApacheContent = new PhpApacheContent()
     phpApacheContent.setDevelopmentCommons()
     phpApacheContent.setPhpVersion("8.1")
-    
+
     const expectContent = `version: "3.5"
 
 services:
@@ -167,7 +167,7 @@ CMD ["-D", "FOREGROUND"]
   test('Php Apache Composer changing port for object', () => {
     const phpApacheContent = new PhpApacheContent()
     phpApacheContent.setHostPort("88")
-    
+
     const expectContent = `version: "3.5"
 
 services:
@@ -185,5 +185,64 @@ services:
     expect(generatedContent).toEqual(expectContent)
   })
 
+  test('Setting a suffix for document web root and checking the Dockerfile output', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.webDocumentRootSuffix("public")
 
+    const expectedContent = `FROM php:8.2-apache-bullseye
+
+RUN apt-get update
+RUN apt-get install vim zip git -y
+RUN mkdir ./app
+COPY ./configs/000-default.conf
+WORKDIR /app
+EXPOSE 80
+ENTRYPOINT [ "/usr/sbin/apachectl" ]
+CMD ["-D", "FOREGROUND"]
+`
+    expect(phpApacheContent.getDockerfileContent()).toEqual(expectedContent)
+  })
+
+  test('Setting a suffix for document root and checking the configuration file content', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.webDocumentRootSuffix("public")
+    const expectedContent = `<VirtualHost *:80>
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/public
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+`
+    expect(phpApacheContent.getConfigurationsContent()).toEqual(expectedContent)
+  })
+
+  test('Setting a suffix for document root and checking the configuration file content witho other value', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.webDocumentRootSuffix("new/www")
+    const expectedContent = `<VirtualHost *:80>
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/new/www
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+`
+    expect(phpApacheContent.getConfigurationsContent()).toEqual(expectedContent)
+  })
+
+  test('Check if additional configurations files shall be not created', () => {
+    const phpApacheContent = new PhpApacheContent()
+    expect(phpApacheContent.mayWriteConfigurationFile()).toBe(false)
+  })
+
+  test('Check if additional configurations files shall be created', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.webDocumentRootSuffix("public")
+    expect(phpApacheContent.mayWriteConfigurationFile()).toBe(true)
+  })
 })

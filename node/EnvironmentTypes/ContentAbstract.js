@@ -89,4 +89,8 @@ export default class ContentAbstract {
   getAdditionalFilesWithPathsAndContents() {
     return []
   }
+
+  webDocumentRootSuffix(valueFromCli) {
+    throw new NotFromCurrentContentClass("This method (webDocumentRootSuffix) is not designed to work with this class.")
+  }
 }

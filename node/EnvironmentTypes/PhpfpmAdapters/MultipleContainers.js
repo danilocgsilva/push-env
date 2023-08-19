@@ -38,6 +38,11 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
 `
   }
 
+  /**
+   * Returns the Nginx server block file content
+   * 
+   * @returns string
+   */
   getConfigurationsContent() {
     return `server {
     server_name localhost;
@@ -66,6 +71,11 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
 }`
   }
 
+  /**
+   * Returns -> Dockerfilewebserve <- for this adapter
+   * 
+   * @returns string
+   */
   getDockerFileName() {
     return "Dockerfilewebserve"
   }

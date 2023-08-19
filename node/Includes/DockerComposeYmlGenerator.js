@@ -1,4 +1,5 @@
 import GeneratorNotImplementedException from "../Exceptions/GeneratorNotImplementedException.js";
+import ContentAbstract from "../EnvironmentTypes/ContentAbstract.js";
 
 export default class DockerComposeYmlGenerator {
   #generator = null
@@ -11,6 +12,11 @@ export default class DockerComposeYmlGenerator {
     this.#generator = generator
   }
 
+  /**
+   * Returns docker-compose.yml file content
+   * 
+   * @returns String
+   */
   generate() {
     return this.#generator.generate()
   }
@@ -55,14 +61,30 @@ export default class DockerComposeYmlGenerator {
     return this.#generator.setDevelopmentCommons()
   }
 
+  /**
+   * Tells that addition configuration files must be generated.
+   * 
+   * @returns bool
+   */
   mayWriteConfigurationFile() {
     return this.#generator.mayWriteConfigurationFile()
   }
 
+  /**
+   * Returns the Generator
+   * 
+   * @returns ContentAbstract
+   */
   getGenerator() {
     return this.#generator
   }
 
+  /**
+   * Get Dockerfile name.
+   * Usually, is -> Dockerfile <-, but depending on the adapter it can be different
+   * 
+   * @returns string
+   */
   getDockerFileName() {
     return this.#generator.getDockerFileName()
   }
@@ -73,5 +95,9 @@ export default class DockerComposeYmlGenerator {
 
   setSingleContainer() {
     this.#generator.setSingleContainer()
+  }
+
+  webDocumentRootSuffix(suffix) {
+    this.#generator.webDocumentRootSuffix(suffix)
   }
 }

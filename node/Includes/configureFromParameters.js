@@ -48,6 +48,9 @@ const processSingleInput = (confData, configurations, noticeChanges) => {
         throw new Error("The provided value for the single_container context is not known.");
       }
       break
+    case "document_root_suffix":
+      configurations.dockerComposeYmlGenerator.webDocumentRootSuffix(valueFromCli)
+      break
 
     default:
       throw new Error(`The argument name provided ${keyFromCli} is not known.`);

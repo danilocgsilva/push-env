@@ -9,6 +9,7 @@ export default class PhpfpmNginxContent extends ContentAbstract {
   #developmentContext = false
   #singleContainer = false
   #adapter = null
+  #documentRootSuffix = ""
 
   constructor() {
     super()
@@ -32,6 +33,11 @@ export default class PhpfpmNginxContent extends ContentAbstract {
     return this.#phpContainerName
   }
 
+  /**
+   * Returns docker-compose.yml file content
+   * 
+   * @returns string
+   */
   generate() {
     const dockerComposeData = {
       version: "3.5",
@@ -52,6 +58,11 @@ export default class PhpfpmNginxContent extends ContentAbstract {
     return dockerComposeYml
   }
 
+  /**
+   * Returns the Dockerfile content
+   * 
+   * @returns string
+   */
   getDockerfileContent() {
     if (this.#adapter === null) {
       this._setAdapter()
@@ -71,8 +82,12 @@ export default class PhpfpmNginxContent extends ContentAbstract {
     return true
   }
 
+  /**
+   * Returns the Nginx server block file content
+   * 
+   * @returns string
+   */
   getConfigurationsContent() {
-
     this.forcePhpContainerName()
 
     if (this.#adapter === null) {
@@ -83,6 +98,12 @@ export default class PhpfpmNginxContent extends ContentAbstract {
     return this.#adapter.getConfigurationsContent()
   }
 
+  /**
+   * Get Dockerfile name.
+   * Usually, is -> Dockerfile <-, but depending on the adapter it can be different
+   * 
+   * @returns string
+   */
   getDockerFileName() {
     return this.#adapter.getDockerFileName()
   }
@@ -97,6 +118,10 @@ export default class PhpfpmNginxContent extends ContentAbstract {
     }
 
     return this.#adapter.getAdditionalFilesWithPathsAndContents()
+  }
+
+  webDocumentRootSuffix(valueFromCli) {
+    this.#documentRootSuffix = valueFromCli
   }
 
   help() {
