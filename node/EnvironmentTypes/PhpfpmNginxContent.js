@@ -87,15 +87,15 @@ export default class PhpfpmNginxContent extends ContentAbstract {
    * 
    * @returns string
    */
-  getConfigurationsContent() {
+  getHostConfigurationContent() {
     this.forcePhpContainerName()
 
     if (this.#adapter === null) {
-      this.#adapter = new MultipleContainers()
+      this._setAdapter()
       this.#adapter.phpContainerName = this.#phpContainerName
     }
 
-    return this.#adapter.getConfigurationsContent()
+    return this.#adapter.getHostConfigurationContent()
   }
 
   /**
@@ -135,6 +135,10 @@ The <affirmation> can be only yes or true. This installs additional stuffs to th
 `
   }
 
+  getHostConfigurationFilePath() {
+    return "configs/serverblock.conf"
+  }
+
   _prepareSingleContainerMode() {
     const containerName = this.getContainerName() == "" ? "nginx_php_fpm" : `${this.getContainerName()}`
     this.#adapter = new SingleContainer()
@@ -154,6 +158,7 @@ The <affirmation> can be only yes or true. This installs additional stuffs to th
     if (this.#adapter !== null) {
       throw new Error("Adapter already is set.")
     }
+
     if (this.#singleContainer) {
       this.#adapter = new SingleContainer()
     } else {

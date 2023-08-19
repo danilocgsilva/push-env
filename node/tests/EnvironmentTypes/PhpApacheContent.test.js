@@ -194,7 +194,7 @@ services:
 RUN apt-get update
 RUN apt-get install vim zip git -y
 RUN mkdir ./app
-COPY ./configs/000-default.conf
+COPY ./configs/000-default.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /app
 EXPOSE 80
 ENTRYPOINT [ "/usr/sbin/apachectl" ]
@@ -216,7 +216,7 @@ CMD ["-D", "FOREGROUND"]
 
 </VirtualHost>
 `
-    expect(phpApacheContent.getConfigurationsContent()).toEqual(expectedContent)
+    expect(phpApacheContent.getHostConfigurationContent()).toEqual(expectedContent)
   })
 
   test('Setting a suffix for document root and checking the configuration file content witho other value', () => {
@@ -232,7 +232,7 @@ CMD ["-D", "FOREGROUND"]
 
 </VirtualHost>
 `
-    expect(phpApacheContent.getConfigurationsContent()).toEqual(expectedContent)
+    expect(phpApacheContent.getHostConfigurationContent()).toEqual(expectedContent)
   })
 
   test('Check if additional configurations files shall be not created', () => {
@@ -244,5 +244,34 @@ CMD ["-D", "FOREGROUND"]
     const phpApacheContent = new PhpApacheContent()
     phpApacheContent.webDocumentRootSuffix("public")
     expect(phpApacheContent.mayWriteConfigurationFile()).toBe(true)
+  })
+
+  test('getHostConfigurationFilePath', () => {
+    const phpApacheContent = new PhpApacheContent()
+    const configurationFilePath = phpApacheContent.getHostConfigurationFilePath()
+    const expectedContent = "config/000-default.conf"
+    expect(configurationFilePath).toEqual(expectedContent)
+  })
+
+  test('Test generate with different document root path', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.webDocumentRootSuffix("public")
+
+    const expectContent = `version: "3.5"
+
+services:
+  php-apache:
+    build:
+      context: .
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/var/www/html
+    working_dir: /var/www/html
+    container_name: php-apache
+`
+    const generatedContent = phpApacheContent.generate()
+
+    expect(generatedContent).toEqual(expectContent)
   })
 })

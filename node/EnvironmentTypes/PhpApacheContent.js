@@ -45,10 +45,10 @@ export default class PhpApacheContent extends ContentAbstract {
 
     const serviceBody = {}
 
-    if (!this.#developmentContext) {
-      serviceBody.image = `php:${this.#phpVersion}-apache-bullseye`
-    } else {
+    if (this.#developmentContext || this.#documentRootSuffix !== "") {
       serviceBody.build = { context: "." }
+    } else {
+      serviceBody.image = `php:${this.#phpVersion}-apache-bullseye`
     }
 
     serviceBody.ports = [`${this.#hostPort}:80`]
@@ -81,7 +81,7 @@ RUN apt-get install vim zip git -y
 RUN mkdir ./app`
 
     if (this.#documentRootSuffix !== "") {
-      dockerfileContent += "\nCOPY ./configs/000-default.conf"
+      dockerfileContent += "\nCOPY ./configs/000-default.conf /etc/apache2/sites-available/000-default.conf"
     }
 
     dockerfileContent += `
@@ -99,7 +99,7 @@ CMD ["-D", "FOREGROUND"]
    * 
    * @returns string
    */
-  getConfigurationsContent() {
+  getHostConfigurationContent() {
     return `<VirtualHost *:80>
 
         ServerAdmin webmaster@localhost
@@ -127,8 +127,17 @@ CMD ["-D", "FOREGROUND"]
     this.#phpVersion = phpVersion
   }
 
+  /**
+   * Set the suffix for the default document root path for web
+   * 
+   * @param {string} suffix 
+   */
   webDocumentRootSuffix(suffix) {
     this.#documentRootSuffix = suffix
+  }
+
+  getHostConfigurationFilePath() {
+    return "config/000-default.conf"
   }
 
   help() {
@@ -136,6 +145,7 @@ CMD ["-D", "FOREGROUND"]
 
 * php_version: Tested with 8.1, but other versions may works as well.
 * dev: may receive yes or true. This will create a receipt with includes common development packages for the environment, as zip, git, vim and xdebug.
+* hostport: the host port to be redirected to the port 80 from container.
 * document_root_suffix: Appends a path to the default apache web document root, which is the /var/www/html
 `
   }

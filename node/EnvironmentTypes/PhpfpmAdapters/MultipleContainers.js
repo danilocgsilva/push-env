@@ -43,7 +43,7 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
    * 
    * @returns string
    */
-  getConfigurationsContent() {
+  getHostConfigurationContent() {
     return `server {
     server_name localhost;
     root /var/www/html;

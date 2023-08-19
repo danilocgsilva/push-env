@@ -39,7 +39,7 @@ export default class SingleContainer {
    * 
    * @returns string
    */
-  getConfigurationsContent() {
+  getHostConfigurationContent() {
     return `server {
     listen 80 default_server;
     listen [::]:80 default_server;

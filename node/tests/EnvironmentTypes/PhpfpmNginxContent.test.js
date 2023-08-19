@@ -127,7 +127,7 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
     access_log /var/log/nginx/access.log;
 }`
 
-    expect(nginxPhpFpmContent.getConfigurationsContent()).toEqual(expectedContent)
+    expect(nginxPhpFpmContent.getHostConfigurationContent()).toEqual(expectedContent)
 
   })
 
@@ -163,7 +163,40 @@ COPY ./configs/serverblock.conf /etc/nginx/conf.d/default.conf
     access_log /var/log/nginx/access.log;
 }`
 
-    expect(nginxPhpFpmContent.getConfigurationsContent()).toEqual(expectedContent)
+    expect(nginxPhpFpmContent.getHostConfigurationContent()).toEqual(expectedContent)
+  })
+
+  test('Test get configuration content for single content', () => {
+
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    nginxPhpFpmContent.setSingleContainer()
+
+    const expectedContent = `server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+
+    index index.html index.htm index.nginx-debian.html index.php;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+`
+
+    expect(nginxPhpFpmContent.getHostConfigurationContent()).toEqual(expectedContent)
   })
 
   test('Correct Dockerfilephp receipt', () => {
@@ -308,6 +341,13 @@ while : ; do sleep 1000; done
 `
 
     expect(additionalContent[0].content).toEqual(expectedContent)
+  })
+
+  test('getHostConfigurationFilePath', () => {
+    const nginxPhpFpmContent = new PhpfpmNginxContent()
+    const configurationFilePath = nginxPhpFpmContent.getHostConfigurationFilePath()
+    const expectedContent = "configs/serverblock.conf"
+    expect(configurationFilePath).toEqual(expectedContent)
   })
 
 })
