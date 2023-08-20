@@ -194,7 +194,7 @@ services:
 RUN apt-get update
 RUN apt-get install vim zip git -y
 RUN mkdir ./app
-COPY ./configs/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ./config/000-default.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /app
 EXPOSE 80
 ENTRYPOINT [ "/usr/sbin/apachectl" ]

@@ -81,7 +81,7 @@ RUN apt-get install vim zip git -y
 RUN mkdir ./app`
 
     if (this.#documentRootSuffix !== "") {
-      dockerfileContent += "\nCOPY ./configs/000-default.conf /etc/apache2/sites-available/000-default.conf"
+      dockerfileContent += "\nCOPY ./config/000-default.conf /etc/apache2/sites-available/000-default.conf"
     }
 
     dockerfileContent += `
