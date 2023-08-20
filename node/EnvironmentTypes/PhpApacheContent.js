@@ -75,16 +75,22 @@ export default class PhpApacheContent extends ContentAbstract {
    */
   getDockerfileContent() {
     let dockerfileContent = `FROM php:${this.#phpVersion}-apache-bullseye
+`
 
+    if (this.#developmentContext) {
+      dockerfileContent += `
 RUN apt-get update
-RUN apt-get install vim zip git -y
-RUN mkdir ./app`
+RUN apt-get install -y vim git zip curl wget
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer`
+    }
 
     if (this.#documentRootSuffix !== "") {
       dockerfileContent += "\nCOPY ./config/000-default.conf /etc/apache2/sites-available/000-default.conf"
     }
 
     dockerfileContent += `
+RUN a2enmod rewrite
+RUN mkdir ./app
 WORKDIR /app
 EXPOSE 80
 ENTRYPOINT [ "/usr/sbin/apachectl" ]

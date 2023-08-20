@@ -99,7 +99,9 @@ services:
     const expectedContent = `FROM php:8.2-apache-bullseye
 
 RUN apt-get update
-RUN apt-get install vim zip git -y
+RUN apt-get install -y vim git zip curl wget
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN a2enmod rewrite
 RUN mkdir ./app
 WORKDIR /app
 EXPOSE 80
@@ -139,7 +141,7 @@ services:
     expect(generatedContent).toEqual(expectContent)
   })
 
-  test('Php Apache Composer with development packages - Dockerfile', () => {
+  test('Php Apache Composer with development packages - Dockerfile and setting port', () => {
     const phpApacheContent = new PhpApacheContent()
     phpApacheContent.setDevelopmentCommons()
     phpApacheContent.setPhpVersion("8.1")
@@ -147,7 +149,9 @@ services:
     const expectedContent = `FROM php:8.1-apache-bullseye
 
 RUN apt-get update
-RUN apt-get install vim zip git -y
+RUN apt-get install -y vim git zip curl wget
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN a2enmod rewrite
 RUN mkdir ./app
 WORKDIR /app
 EXPOSE 80
@@ -191,10 +195,9 @@ services:
 
     const expectedContent = `FROM php:8.2-apache-bullseye
 
-RUN apt-get update
-RUN apt-get install vim zip git -y
-RUN mkdir ./app
 COPY ./config/000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
+RUN mkdir ./app
 WORKDIR /app
 EXPOSE 80
 ENTRYPOINT [ "/usr/sbin/apachectl" ]
@@ -274,4 +277,27 @@ services:
 
     expect(generatedContent).toEqual(expectContent)
   })
+
+  test('Development content for Dockerfile setting document suffix.', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.webDocumentRootSuffix("public")
+    phpApacheContent.setDevelopmentCommons()
+
+    const expectedContent = `FROM php:8.2-apache-bullseye
+
+RUN apt-get update
+RUN apt-get install -y vim git zip curl wget
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+COPY ./config/000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
+RUN mkdir ./app
+WORKDIR /app
+EXPOSE 80
+ENTRYPOINT [ "/usr/sbin/apachectl" ]
+CMD ["-D", "FOREGROUND"]
+`
+
+    expect(phpApacheContent.getDockerfileContent()).toEqual(expectedContent)
+  })
+
 })
