@@ -93,8 +93,6 @@ RUN a2enmod rewrite
 RUN mkdir ./app
 WORKDIR /app
 EXPOSE 80
-ENTRYPOINT [ "/usr/sbin/apachectl" ]
-CMD ["-D", "FOREGROUND"]
 `
 
     return dockerfileContent
