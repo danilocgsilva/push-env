@@ -3,7 +3,7 @@ import ContentAbstract from "./ContentAbstract.js";
 export default class DebianContent extends ContentAbstract {
 
   #defaultTargetPort
-  
+
   constructor() {
     super()
     this.#defaultTargetPort = null
@@ -38,9 +38,14 @@ export default class DebianContent extends ContentAbstract {
   }
 
   getDockerfileContent() {
-    const dockerfileContent = `FROM debian:bookworm
 
-CMD while : ; do sleep 1000; done`;
+    let dockerfileContent = "FROM debian:bookworm\n\n"
+
+    if (this.entryScriptIsSetted()) {
+      dockerfileContent += "CMD entry.sh\n"
+    } else {
+      dockerfileContent += "CMD while : ; do sleep 1000; done\n"
+    }
 
     return dockerfileContent;
   }
@@ -60,5 +65,23 @@ Use hostport:<your_host_port> in the command line. It is the host port that will
 `
 
     return message
+  }
+
+  getAdditionalFilesWithPathsAndContents() {
+    if (this.entryScriptIsSetted()) {
+
+      const entrypointcontent = `#!/bin/bash
+
+while : ; do sleep 1000; done
+`
+      
+      return [
+        {
+          "content": entrypointcontent,
+          "path": "entry.sh"
+        }
+      ]
+    }
+    return []
   }
 }

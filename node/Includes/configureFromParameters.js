@@ -48,8 +48,17 @@ const processSingleInput = (confData, configurations, noticeChanges) => {
         throw new Error("The provided value for the single_container context is not known.");
       }
       break
+
     case "document_root_suffix":
       configurations.dockerComposeYmlGenerator.webDocumentRootSuffix(valueFromCli)
+      break
+
+    case "set_entrypoint":
+      if (valueFromCli === "yes" || valueFromCli === "true") {
+        configurations.dockerComposeYmlGenerator.setEntryScript("", "")
+      } else {
+        throw new Error("The provided value for the single_container context is not known.");
+      }
       break
 
     default:

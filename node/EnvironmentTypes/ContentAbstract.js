@@ -4,10 +4,12 @@ import NotFromCurrentContentClass from '../Exceptions/NotFromCurrentContentClass
 export default class ContentAbstract {
   _containerName
   #networkMode
+  #customEntryScript
 
   constructor() {
     this._containerName = ""
     this.#networkMode = ""
+    this.#customEntryScript = {}
   }
 
   setContainerName(containerName) {
@@ -78,6 +80,31 @@ export default class ContentAbstract {
     throw new NotFromCurrentContentClass("This method is not designed to work with this class.")
   }
 
+  /**
+   * Set the name for an entry script, after the build process.
+   * By default, the class will have am empty string, which means there is no nedded to write an entry shell script.
+   * 
+   * @param {string} name 
+   */
+  setEntryScript(path, content) {
+    let settedPath
+    let settedContent
+    if (path === "" || path === undefined) {
+      settedPath = "entry.sh"
+    }
+    if (content === "" || path === undefined) {
+      settedContent = `#!/bin/bash
+
+while : ; do sleep 1000; done
+`
+    }
+
+    this.#customEntryScript = {
+      path: settedPath,
+      content: settedContent
+    }
+  }
+
   help() {
     return "Help not implemented yet. Sorry!"
   }
@@ -92,5 +119,11 @@ export default class ContentAbstract {
 
   webDocumentRootSuffix(valueFromCli) {
     throw new NotFromCurrentContentClass("This method (webDocumentRootSuffix) is not designed to work with this class.")
+  }
+
+  entryScriptIsSetted() {
+    const stringfiedEntryScriptObject = JSON.stringify(this.#customEntryScript)
+    const emptyStringfied = JSON.stringify({})
+    return stringfiedEntryScriptObject !== emptyStringfied
   }
 }
