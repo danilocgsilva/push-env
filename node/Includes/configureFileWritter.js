@@ -31,10 +31,14 @@ export default function configureFileWritter(
 
     const generator = dockerComposeYmlGenerator.getGenerator()
 
-    dockerFileWritter.setAdditionalFileToWrite({
-      content: generator.getHostConfigurationContent(),
-      path: path.resolve(baseDir, generator.getHostConfigurationFilePath())
-    })
+    const configurationFileContent = generator.getHostConfigurationContent()
+
+    if (configurationFileContent !== "") {
+      dockerFileWritter.setAdditionalFileToWrite({
+        content: configurationFileContent,
+        path: path.resolve(baseDir, generator.getHostConfigurationFilePath())
+      })
+    }
 
     const additionalFiles = generator.getAdditionalFilesWithPathsAndContents()
     if (additionalFiles.length !== 0) {

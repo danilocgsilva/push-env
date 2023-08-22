@@ -121,9 +121,14 @@ while : ; do sleep 1000; done
     throw new NotFromCurrentContentClass("This method (webDocumentRootSuffix) is not designed to work with this class.")
   }
 
+  getHostConfigurationContent() {
+    return ""
+  }
+
   entryScriptIsSetted() {
     const stringfiedEntryScriptObject = JSON.stringify(this.#customEntryScript)
     const emptyStringfied = JSON.stringify({})
     return stringfiedEntryScriptObject !== emptyStringfied
   }
+  
 }

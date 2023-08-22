@@ -67,8 +67,11 @@ services:
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install vim git curl wget zip
+RUN apt-get install vim git curl wget zip -y
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+COPY configs/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
 `
     expect(phpContent.getDockerfileContent()).toEqual(expectedContent)
   })
@@ -88,8 +91,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install vim git curl wget zip
+RUN apt-get install vim git curl wget zip -y
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+COPY configs/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
 `
     expect(phpContent.getDockerfileContent()).toEqual(expectedContent)
   })

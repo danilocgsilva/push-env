@@ -56,8 +56,11 @@ export default class PHPContent extends ContentAbstract {
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install vim git curl wget zip
+RUN apt-get install vim git curl wget zip -y
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+COPY configs/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
 `
       return dockerReceipt + suffix
     }
@@ -67,6 +70,27 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 
   setPhpVersion(phpVersion) {
     this.#phpVersion = phpVersion
+  }
+
+  mayWriteConfigurationFile() {
+    if (this.#developmentContext === "") {
+      return false
+    }
+    return true
+  }
+
+  getAdditionalFilesWithPathsAndContents() {
+    const fileContent = `zend_extension=xdebug
+xdebug.start_with_request = 1
+xdebug.mode=debug
+`
+
+    const additionalFile = {
+      content: fileContent,
+      path: "configs/docker-php-ext-xdebug.ini"
+    }
+
+    return [additionalFile]
   }
 
   help() {
