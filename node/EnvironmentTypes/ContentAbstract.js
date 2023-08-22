@@ -64,7 +64,7 @@ export default class ContentAbstract {
     throw new NotFromCurrentContentClass("This method is not designed to work with this class.")
   }
 
-  setPhpVersion() {
+  setPhpVersion(phpVersion) {
     throw new NotFromCurrentContentClass("This method is not designed to work with this class.")
   }
 

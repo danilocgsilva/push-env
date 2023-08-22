@@ -51,4 +51,46 @@ services:
 `
     expect(phpContent.generate()).toEqual(expectContent)
   })
+
+  test('Test for getDockerfileContent', () => {
+    const phpContent = new PHPContent()
+    const expectedContent = "FROM php:latest"
+
+    expect(phpContent.getDockerfileContent()).toEqual(expectedContent)
+  })
+
+  test('getDockerfileContent, with development assets', () => {
+    const phpContent = new PHPContent()
+    phpContent.setDevelopmentCommons()
+
+    const expectedContent = `FROM php:latest
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install vim git curl wget zip
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+`
+    expect(phpContent.getDockerfileContent()).toEqual(expectedContent)
+  })
+
+  test('getDockerfileContent setting php version', () => {
+    const phpContent = new PHPContent()
+    phpContent.setPhpVersion("8.1")
+    const expectedContent = "FROM php:8.1"
+    expect(phpContent.getDockerfileContent()).toEqual(expectedContent)
+  })
+
+  test('getDockerfileContent setting php version and with development packages', () => {
+    const phpContent = new PHPContent()
+    phpContent.setDevelopmentCommons()
+    phpContent.setPhpVersion("8.0")
+    const expectedContent = `FROM php:8.0
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install vim git curl wget zip
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+`
+    expect(phpContent.getDockerfileContent()).toEqual(expectedContent)
+  })
 })

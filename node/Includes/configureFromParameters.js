@@ -54,6 +54,7 @@ const processSingleInput = (confData, configurations, noticeChanges) => {
       break
 
     case "set_entrypoint":
+      
       if (valueFromCli === "yes" || valueFromCli === "true") {
         configurations.dockerComposeYmlGenerator.setEntryScript("", "")
       } else {
