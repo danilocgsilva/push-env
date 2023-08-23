@@ -125,7 +125,7 @@ EXPOSE 80
   }
 
   mayWriteConfigurationFile() {
-    if (this.#documentRootSuffix === "" && this.#developmentContext) {
+    if (this.#documentRootSuffix === "" && !this.#developmentContext) {
       return false
     }
     return true
@@ -133,6 +133,22 @@ EXPOSE 80
 
   setPhpVersion(phpVersion) {
     this.#phpVersion = phpVersion
+  }
+
+  getAdditionalFilesWithPathsAndContents() {
+    if (this.#developmentContext) {
+
+      const xdebugConfigurationChunck = `zend_extension=xdebug
+xdebug.start_with_request = 1
+xdebug.mode=debug
+`
+      
+      return [{
+        content: xdebugConfigurationChunck,
+        path: "configs/docker-php-ext-xdebug.ini"
+      }]
+    }
+    return []
   }
 
   /**

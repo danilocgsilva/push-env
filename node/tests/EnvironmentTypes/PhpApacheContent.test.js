@@ -249,6 +249,12 @@ EXPOSE 80
     expect(phpApacheContent.mayWriteConfigurationFile()).toBe(true)
   })
 
+  test('Check if additional configurations files shall be created when setting to development context', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setDevelopmentCommons()
+    expect(phpApacheContent.mayWriteConfigurationFile()).toBe(true)
+  })
+
   test('getHostConfigurationFilePath', () => {
     const phpApacheContent = new PhpApacheContent()
     const configurationFilePath = phpApacheContent.getHostConfigurationFilePath()
@@ -299,6 +305,41 @@ EXPOSE 80
 `
 
     expect(phpApacheContent.getDockerfileContent()).toEqual(expectedContent)
+  })
+
+  test('Check getAdditionalFilesWithPathsAndContents. Must return empty array by default', () => {
+    const phpApacheContent = new PhpApacheContent()
+    const additionalFileArray = phpApacheContent.getAdditionalFilesWithPathsAndContents()
+    expect(additionalFileArray.length).toEqual(0)
+  })
+
+  test('Check getAdditionalFilesWithPathsAndContents. Must return the file for xdebug configuration, once setted the development packages.', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setDevelopmentCommons()
+    const additionalFileArray = phpApacheContent.getAdditionalFilesWithPathsAndContents()
+    expect(additionalFileArray.length).toEqual(1)
+  })
+
+  test('Check getAdditionalFilesWithPathsAndContents contents. Must have the xdebug configuration.', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setDevelopmentCommons()
+    const additionalFileArray = phpApacheContent.getAdditionalFilesWithPathsAndContents()
+    const xdebugFileData = additionalFileArray[0]
+
+    const expectedContent = `zend_extension=xdebug
+xdebug.start_with_request = 1
+xdebug.mode=debug
+`
+    expect(xdebugFileData.content).toEqual(expectedContent)
+  })
+
+  test('Check getAdditionalFilesWithPathsAndContents path', () => {
+    const phpApacheContent = new PhpApacheContent()
+    phpApacheContent.setDevelopmentCommons()
+    const additionalFileArray = phpApacheContent.getAdditionalFilesWithPathsAndContents()
+    const xdebugFilePath = additionalFileArray[0]
+    const expectedContent = "configs/docker-php-ext-xdebug.ini"
+    expect(xdebugFilePath.path).toEqual(expectedContent)
   })
 
 })
