@@ -101,6 +101,9 @@ services:
 RUN apt-get update
 RUN apt-get install -y vim git zip curl wget
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+COPY configs/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
 RUN a2enmod rewrite
 RUN mkdir ./app
 WORKDIR /app
@@ -149,6 +152,9 @@ services:
 RUN apt-get update
 RUN apt-get install -y vim git zip curl wget
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+COPY configs/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
 RUN a2enmod rewrite
 RUN mkdir ./app
 WORKDIR /app
@@ -282,6 +288,9 @@ services:
 RUN apt-get update
 RUN apt-get install -y vim git zip curl wget
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+COPY configs/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
 COPY ./config/000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 RUN mkdir ./app

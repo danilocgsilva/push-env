@@ -81,7 +81,11 @@ export default class PhpApacheContent extends ContentAbstract {
       dockerfileContent += `
 RUN apt-get update
 RUN apt-get install -y vim git zip curl wget
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer`
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+COPY configs/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d`
+
     }
 
     if (this.#documentRootSuffix !== "") {
@@ -121,7 +125,7 @@ EXPOSE 80
   }
 
   mayWriteConfigurationFile() {
-    if (this.#documentRootSuffix === "") {
+    if (this.#documentRootSuffix === "" && this.#developmentContext) {
       return false
     }
     return true

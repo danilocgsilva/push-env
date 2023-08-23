@@ -47,7 +47,6 @@ try {
 
     const environmentTypes = new EnvironmentTypes();
     environmentTypes.listTypes();
-    console.log("pass")
   } else if (e instanceof ShallNotReplaceFile) {
     const message = `A folder called ${filePath} already exists. Doing nothing.`
     console.log(message)
